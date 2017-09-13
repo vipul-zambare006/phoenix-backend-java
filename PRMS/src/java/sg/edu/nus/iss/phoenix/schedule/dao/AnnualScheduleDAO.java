@@ -5,25 +5,23 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.dao;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
-import sg.edu.nus.iss.phoenix.schedule.entity.WeeklySchedule;
-import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
-
+import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 
 /**
  *
- * @author Vipul
+ * @author default
  */
-public interface ScheduleDAO {
-    /**
+public abstract class AnnualScheduleDAO {
+    	/**
 	 * createValueObject-method. This method is used when the Dao class needs to
 	 * create new value object instance. The reason why this method exists is
 	 * that sometimes the programmer may want to extend also the valueObject and
-	 * then this method can be over-rided to return extended valueObject.
+	 * then this method can be overrided to return extended valueObject. NOTE:
+	 * If you extend the valueObject class, make sure to override the clone()
+	 * method in it!
      * @return 
 	 */
 	public abstract AnnualSchedule createValueObject();
@@ -34,12 +32,12 @@ public interface ScheduleDAO {
 	 * convenience method for the real load-method which accepts the valueObject
 	 * as a parameter. Returned valueObject will be created using the
 	 * createValueObject() method.
-     * @param name
+     * @param id
      * @return 
      * @throws sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException 
      * @throws java.sql.SQLException 
 	 */
-	public abstract AnnualSchedule getObject(String name)
+	public abstract AnnualSchedule getObject(String id)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -85,7 +83,8 @@ public interface ScheduleDAO {
 	 *            must be set for this to work properly.
      * @throws java.sql.SQLException
 	 */
-	public abstract void create(ProgramSlot valueObject) throws SQLException;
+	public abstract void create(AnnualSchedule valueObject)
+			throws SQLException;
 
 	/**
 	 * save-method. This method will save the current state of valueObject to
@@ -133,11 +132,9 @@ public interface ScheduleDAO {
 	 * implementation of this method should be different with different DB
 	 * backends.)
 	 * 
-	 * @param conn
-	 *            This method requires working database connection.
      * @throws java.sql.SQLException
 	 */
-	public abstract void deleteAll(Connection conn) throws SQLException;
+	public abstract void deleteAll() throws SQLException;
 
 	/**
 	 * coutAll-method. This method will return the number of all rows from table
@@ -167,5 +164,8 @@ public interface ScheduleDAO {
      * @throws java.sql.SQLException 
 	 */
 	public abstract List<AnnualSchedule> searchMatching(AnnualSchedule valueObject)
+			throws SQLException;
+
+	public abstract AnnualSchedule searchMatching(String uid)
 			throws SQLException;
 }
