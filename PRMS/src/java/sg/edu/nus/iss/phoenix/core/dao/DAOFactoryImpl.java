@@ -6,14 +6,17 @@ import sg.edu.nus.iss.phoenix.authenticate.dao.impl.RoleDaoImpl;
 import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
 import sg.edu.nus.iss.phoenix.radioprogram.dao.ProgramDAO;
 import sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAOImpl;
+import sg.edu.nus.iss.phoenix.schedule.dao.ProgramSlotDAO;
 import sg.edu.nus.iss.phoenix.schedule.dao.impl.ScheduleDaoImpl;
 import sg.edu.nus.iss.phoenix.schedule.dao.ScheduleDAO;
+import sg.edu.nus.iss.phoenix.schedule.dao.impl.ProgramSlotDaoImpl;
 
 public class DAOFactoryImpl implements DAOFactory {
 	private UserDao userDAO = new UserDaoImpl();
 	private RoleDao roleDAO = new RoleDaoImpl();
 	private ProgramDAO rpdao = new ProgramDAOImpl();
         private ScheduleDAO scheduleDAO = new ScheduleDaoImpl();
+        private ProgramSlotDAO programSlotDAO = new ProgramSlotDaoImpl();
 
 	@Override
 	public UserDao getUserDAO() {
@@ -37,4 +40,11 @@ public class DAOFactoryImpl implements DAOFactory {
         public ScheduleDAO getScheduleDAO() {
                 return scheduleDAO;
         }
+
+    @Override
+    public ProgramSlotDAO getProgramSlotDAO() {
+        return programSlotDAO;
+    }
+        
+        
 }

@@ -11,69 +11,85 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
-import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
 import sg.edu.nus.iss.phoenix.core.dao.DBConstants;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
-import sg.edu.nus.iss.phoenix.schedule.dao.ScheduleDAO;
-import sg.edu.nus.iss.phoenix.schedule.entity.AnnualSchedule;
+import sg.edu.nus.iss.phoenix.schedule.dao.ProgramSlotDAO;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
 /**
  *
  * @author default
  */
-public class ScheduleDaoImpl implements ScheduleDAO {
+public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
     private static final String DELIMITER = ":";
-    private static final Logger logger = Logger.getLogger(ScheduleDaoImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(ProgramSlotDaoImpl.class.getName());
 
     Connection connection;
 
-    public ScheduleDaoImpl() {
+    public ProgramSlotDaoImpl() {
         super();
         // TODO Auto-generated constructor stub
         connection = openConnection();
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#createValueObject()
-     */
     @Override
-    public AnnualSchedule createValueObject() {
+    public ProgramSlot createValueObject() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public AnnualSchedule getObject(String name) throws NotFoundException, SQLException {
+    public ProgramSlot getObject(String name) throws NotFoundException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void load(AnnualSchedule valueObject) throws NotFoundException, SQLException {
+    public void load(ProgramSlot valueObject) throws NotFoundException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<AnnualSchedule> loadAll() throws SQLException {
+    public List<ProgramSlot> loadAll() throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
-        /* logic to create annnual and weekly schedule based on program slot will come here. */
-        
+        /* insert into `phoenix`.`program-slot` 
+                   values(003000,'2011-10-24', '011-10-24 00:30:00',
+                  'dance floor');*/
+
+        String sql = "";
+        PreparedStatement stmt = null;
+        try {
+            sql = "INSERT INTO program-slot ( duration, dateOfProgram, startTime, "
+                    + " `program-name`) VALUES (?, ?, ?, ?) ";
+            stmt = this.connection.prepareStatement(sql);
+
+            stmt.setString(1, valueObject.getDuration().toString());
+            stmt.setString(2, valueObject.getDateOfProgram().toString());
+            stmt.setString(3, valueObject.getStartTime().toString());
+            stmt.setString(4, valueObject.getProgramName().toString());
+
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount != 1) {
+                // System.out.println("PrimaryKey Error when updating DB!");
+                throw new SQLException("PrimaryKey Error when updating DB!");
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
     }
 
     @Override
-    public void save(AnnualSchedule valueObject) throws NotFoundException, SQLException {
+    public void save(ProgramSlot valueObject) throws NotFoundException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(AnnualSchedule valueObject) throws NotFoundException, SQLException {
+    public void delete(ProgramSlot valueObject) throws NotFoundException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -88,7 +104,7 @@ public class ScheduleDaoImpl implements ScheduleDAO {
     }
 
     @Override
-    public List<AnnualSchedule> searchMatching(AnnualSchedule valueObject) throws SQLException {
+    public List<ProgramSlot> searchMatching(ProgramSlot valueObject) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -125,4 +141,5 @@ public class ScheduleDaoImpl implements ScheduleDAO {
 
         return result;
     }
+
 }
