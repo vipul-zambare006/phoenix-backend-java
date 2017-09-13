@@ -19,5 +19,6 @@ public interface DAOFactory {
 	RoleDao getRoleDAO();
 
 	UserDao getUserDAO();
-	
+        
+        ScheduleDao getScheduleDAO();
 }
