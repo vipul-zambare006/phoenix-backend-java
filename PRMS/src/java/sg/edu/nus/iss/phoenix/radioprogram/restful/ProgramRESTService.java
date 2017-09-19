@@ -95,6 +95,13 @@ public class ProgramRESTService {
         return usersList;
     }
     
+    @PUT
+    @Path("/createUser")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createUser(User user){
+        userService.processCreate(user);
+    }
+    
     /**
      * PUT method for updating or creating an instance of resource
      * @param content representation for the resource
