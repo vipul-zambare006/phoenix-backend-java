@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Vipul
+ * @author boonkui
  */
-@Action("addeditschedule")
+@Action("addeditrp")
 public class AddEditRadioProgramCmd implements Perform {
     @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
