@@ -9,7 +9,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import sg.edu.nus.iss.phoenix.core.dao.DBConstants;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
@@ -55,30 +58,27 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
-        /* insert into `phoenix`.`program-slot` 
-                   values(003000,'2011-10-24', '011-10-24 00:30:00',
-                  'dance floor');*/
-
+        /* insert into `phoenix`.`program-slot` values(003000,'2011-10-24', '011-10-24 00:30:00', 'dance floor');*/
         String sql = "";
         PreparedStatement stmt = null;
+
         try {
-            sql = "INSERT INTO program-slot ( duration, dateOfProgram, startTime, "
-                    + " `program-name`) VALUES (?, ?, ?, ?) ";
+            sql = "INSERT INTO `program-slot` ( duration, dateOfProgram, startTime, `program-name`, presenter, producer) VALUES (?, ?, ?, ?) ";
             stmt = this.connection.prepareStatement(sql);
 
-            stmt.setString(1, valueObject.getDuration().toString());
-            stmt.setString(2, valueObject.getDateOfProgram().toString());
-            stmt.setString(3, valueObject.getStartTime().toString());
-            stmt.setString(4, valueObject.getProgramName().toString());
+            stmt.setString(1, valueObject.getDuration());
+            stmt.setString(2, valueObject.getDateOfProgram());
+            stmt.setString(3, valueObject.getStartTime());
+           // stmt.setString(4, valueObject.r());
 
             int rowcount = databaseUpdate(stmt);
             if (rowcount != 1) {
-                // System.out.println("PrimaryKey Error when updating DB!");
                 throw new SQLException("PrimaryKey Error when updating DB!");
             }
         } finally {
             if (stmt != null) {
                 stmt.close();
+                closeConnection();
             }
         }
     }
@@ -141,5 +141,14 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
         return result;
     }
+    
+    private void closeConnection() {
+		try {
+			this.connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

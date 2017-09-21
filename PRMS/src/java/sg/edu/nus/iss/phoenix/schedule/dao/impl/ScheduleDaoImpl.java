@@ -26,7 +26,7 @@ public class ScheduleDaoImpl implements ScheduleDAO {
 
     private static final String DELIMITER = ":";
     private static final Logger logger = Logger.getLogger(ScheduleDaoImpl.class.getName());
-
+private static final String user = "PointyHead";
     Connection connection;
 
     public ScheduleDaoImpl() {
@@ -64,7 +64,32 @@ public class ScheduleDaoImpl implements ScheduleDAO {
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
         /* logic to create annnual and weekly schedule based on program slot will come here. */
+       
+//        String year = valueObject.getDateOfProgram().substring(0, 3);
+//        String assignedBy = user;
         
+        String sql = "";
+        PreparedStatement stmt = null;
+
+        try {
+            sql = "INSERT INTO `annual-schedule` ( year, assignedBy) VALUES (?, ?) ";
+            stmt = this.connection.prepareStatement(sql);
+
+            stmt.setString(1, valueObject.getDuration());
+            stmt.setString(2, valueObject.getDateOfProgram());
+            stmt.setString(3, valueObject.getStartTime());
+           // stmt.setString(4, valueObject.getProgramName());
+
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount != 1) {
+                throw new SQLException("PrimaryKey Error when updating DB!");
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+                closeConnection();
+            }
+        }
     }
 
     @Override
@@ -125,4 +150,13 @@ public class ScheduleDaoImpl implements ScheduleDAO {
 
         return result;
     }
+    
+    private void closeConnection() {
+		try {
+			this.connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

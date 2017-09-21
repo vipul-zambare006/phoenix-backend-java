@@ -5,29 +5,36 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.entity;
 
-import java.util.Date;
-import java.sql.Time;
+import java.io.Serializable;
+import sg.edu.nus.iss.phoenix.authenticate.entity.User;
+import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 
 /**
  *
  * @author default
  */
-public class ProgramSlot {
-    private Time duration;
-    private Date dateOfProgram;
-    private Time startTime;
-    private String programName;
+public class ProgramSlot  implements Cloneable, Serializable {
+    private String duration;
+    private String dateOfProgram;
+    private String startTime;
+    private RadioProgram radioProgram;
+    private User presenter;
+    private User producer;
+    private User assignedBy;
     
     public ProgramSlot () {
 
     }
 
-    public ProgramSlot (Time duration, Date dateOfProgram, Time startTime, String programName) 
+    public ProgramSlot (String duration, String dateOfProgram, String startTime, RadioProgram radioProgram, User presenter, User producer, User assignedBy) 
     {
        this.duration = duration;
        this.dateOfProgram = dateOfProgram;
-       this.programName = programName;
+       this.radioProgram = radioProgram;
        this.startTime = startTime;
+       this.presenter = presenter;
+       this.producer = producer;
+       this.assignedBy = assignedBy;
     }
 
     /** 
@@ -37,35 +44,59 @@ public class ProgramSlot {
      * @return 
      */
 
-    public Time getDuration() {
+    public String getDuration() {
           return this.duration;
     }
-    public void setDuration(Time duration) {
+    public void setDuration(String duration) {
           this.duration = duration;
     }
 
-    public Date getDateOfProgram() {
+    public String getDateOfProgram() {
           return this.dateOfProgram;
     }
-    public void setDateOfProgram(Date dateOfProgram) {
+    public void setDateOfProgram(String dateOfProgram) {
           this.dateOfProgram = dateOfProgram;
     }
     
-    public Time getStartTime(){
+    public String getStartTime(){
         return this.startTime;
     }
     
-    public void setStartTime(Time startTime){
+    public void setStartTime(String startTime){
         this.startTime = startTime;
     }
-
-    public String getProgramName(){
-      return  this.programName ;
+    
+     public String getPresenter(){
+        return this.presenter.getName();
     }
     
-    public void setProgramName(String programName){
-            this.programName = programName;
-        }
+//    public void setPresenter(String startTime){
+//        this.startTime = startTime;
+//    }
+    
+     public String getProducer(){
+        return this.producer.getName();
+    }
+    
+//    public void setProducer(String startTime){
+//        this.startTime = startTime;
+//    }
+    
+     public String getRadioProgramName(){
+        return this.radioProgram.getName();
+    }
+    
+//    public void setStartTime(String startTime){
+//        this.startTime = startTime;
+//    }
+
+//    public String getProgramName(){
+//      return  this.programName ;
+//    }
+//    
+//    public void setProgramName(String programName){
+//            this.programName = programName;
+//        }
     
     /** 
      * setAll allows to set all persistent variables in one method call.
@@ -76,10 +107,10 @@ public class ProgramSlot {
      * @param Time duration, Date dateOfProgram, Time startTime, String programName
      */
 
-      public void setAll (Time duration, Date dateOfProgram, Time startTime, String programName) {
+      public void setAll (String duration, String dateOfProgram, String startTime, RadioProgram radioProgram) {
         this.duration = duration;
         this.dateOfProgram = dateOfProgram;
-        this.programName = programName;
+        this.radioProgram = radioProgram;
         this.startTime = startTime;
     }
       

@@ -107,7 +107,12 @@ public class ProgramDAOImpl implements ProgramDAO {
 				throw new SQLException("PrimaryKey Error when updating DB!");
 			}
 
-		} finally {
+		}
+                catch(Exception ex){
+                   closeConnection();
+                }
+                    
+                    finally {
 			if (stmt != null)
 				stmt.close();
 			closeConnection();

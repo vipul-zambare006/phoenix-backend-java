@@ -4,8 +4,7 @@
  * and open the template in the editor.
  */
 
-/*TODO: Only creating create programslot service as of now */
-
+ /*TODO: Only creating create programslot service as of now */
 package sg.edu.nus.iss.phoenix.schedule.restful;
 
 import java.io.UnsupportedEncodingException;
@@ -28,7 +27,13 @@ import sg.edu.nus.iss.phoenix.radioprogram.restful.RadioPrograms;
 import sg.edu.nus.iss.phoenix.radioprogram.service.ProgramService;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.service.ScheduleService;
-
+import java.util.Date;
+import java.sql.Time;
+import java.text.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sg.edu.nus.iss.phoenix.schedule.dao.impl.ProgramSlotDaoImpl;
+//import org.codehaus.jackson.JsonParseException;
 /**
  *
  * @author Vipul
@@ -78,7 +83,6 @@ public class ScheduleRESTService {
 ////
 //        return rpsList;
 //    }
-
     /**
      * PUT method for updating or creating an instance of resource
      *
@@ -90,7 +94,7 @@ public class ScheduleRESTService {
 //    public void updateRadioProgram(RadioProgram rp) {
 //        service.processModify(rp);
 //    }
-
+    
     /**
      * POST method for creating an instance of resource
      *
@@ -100,7 +104,27 @@ public class ScheduleRESTService {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createRadioProgram(ProgramSlot programSlot) {
+//        ObjectMapper mapper = new ObjectMapper();
+//        ProgramSlot value = mapper.readValue(programSlot, ProgramSlot.class);
+//        System.out.println(value);
+
+       // String startDate = programSlot.getDateOfProgram();
+        //Date sqlStartDate = convertStringToSqlDate(startDate);
+       // programSlot.setDateOfProgram(sqlStartDate.toString());
         scheduleService.processCreate(programSlot);
+    }
+
+    private Date convertStringToSqlDate(String inputDate) {
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+        java.util.Date date = null;
+
+        try {
+            date = sdf1.parse(inputDate);
+        } catch (ParseException ex) {
+            Logger.getLogger(ProgramSlotDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        java.sql.Date sqlStartDate = new java.sql.Date(date.getTime());
+        return sqlStartDate;
     }
 
     /**

@@ -87,9 +87,10 @@ public class ScheduleService {
                            /* logic to check overlapping with existing Prg slot */
                     }
                     else{
+                        scheduleDao.create(programSlot);
                         programSlotDao.create(programSlot);
                         /* ONCE PROGRAM SLOT CREATED ADD TO ANNUAL AND WEEKLY SCHEDULE */
-                        scheduleDao.create(programSlot);
+                       
                     }
 			
 		} catch (SQLException e) {
