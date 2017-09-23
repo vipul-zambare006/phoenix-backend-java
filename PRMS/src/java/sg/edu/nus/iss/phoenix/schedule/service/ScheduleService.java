@@ -111,13 +111,11 @@ public class ScheduleService {
 				e.printStackTrace();
 			}
 		
-	}
+	}*/
 
-	public void processDelete(String name) {
-
-            try {
-                RadioProgram rp = new RadioProgram(name);
-                rpdao.delete(rp);
+	public void processDelete(ProgramSlot ps) {
+        try {
+                programSlotDao.delete(ps);
             } catch (NotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -125,6 +123,5 @@ public class ScheduleService {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-	}*/
-
+    }
 }

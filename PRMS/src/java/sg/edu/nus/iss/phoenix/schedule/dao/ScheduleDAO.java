@@ -119,7 +119,7 @@ public interface ScheduleDAO {
      * @throws sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException
      * @throws java.sql.SQLException
 	 */
-	public abstract void delete(AnnualSchedule valueObject)
+	public abstract void delete(ProgramSlot valueObject)
 			throws NotFoundException, SQLException;
 
 	/**

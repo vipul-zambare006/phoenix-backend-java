@@ -98,8 +98,38 @@ private static final String user = "PointyHead";
     }
 
     @Override
-    public void delete(AnnualSchedule valueObject) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(ProgramSlot valueObject) throws NotFoundException, SQLException {
+        /*logic to delete program slot from the schedule*/
+        if (valueObject.getDuration() == null && valueObject.getDateOfProgram()== null) {
+			// System.out.println("Can not delete without Primary-Key!");
+			throw new NotFoundException("Can not delete without Primary-Key!");
+		}
+
+		String sql = "DELETE FROM `program-slot` WHERE (`duration` = ? ) AND ('dateOfProgram' = ?); ";
+		PreparedStatement stmt = null;
+		openConnection();
+		try {
+			stmt = connection.prepareStatement(sql);
+			stmt.setString(1, valueObject.getDuration());
+                        stmt.setString(2, valueObject.getDateOfProgram());
+                        
+
+			int rowcount = databaseUpdate(stmt);
+			if (rowcount == 0) {
+				// System.out.println("Object could not be deleted (PrimaryKey not found)");
+				throw new NotFoundException(
+						"Object could not be deleted! (PrimaryKey not found)");
+			}
+			if (rowcount > 1) {
+				// System.out.println("PrimaryKey Error when updating DB! (Many objects were deleted!)");
+				throw new SQLException(
+						"PrimaryKey Error when updating DB! (Many objects were deleted!)");
+			}
+		} finally {
+			if (stmt != null)
+				stmt.close();
+			closeConnection();
+		}
     }
 
     @Override

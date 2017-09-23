@@ -132,18 +132,11 @@ public class ScheduleRESTService {
      *
      * @param name name of the resource
      */
-//    @DELETE
-//    @Path("/delete/{rpname}")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public void deleteRadioProgram(@PathParam("rpname") String name) {
-//        String name2;
-//        try {
-//            name2 = URLDecoder.decode(name, "UTF-8");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//            return;
-//        }
-//
-//        service.processDelete(name2);
-//    }
+    @DELETE
+    @Path("/delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void processDelete(ProgramSlot ps) {
+        
+        scheduleService.processDelete(ps);
+    }
 }
