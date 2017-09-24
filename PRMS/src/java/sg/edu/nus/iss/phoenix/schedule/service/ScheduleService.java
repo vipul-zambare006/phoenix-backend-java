@@ -123,7 +123,7 @@ public class ScheduleService {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-	}*/
+	}
     private boolean isProgramSlotExists(ProgramSlot programSlot) throws SQLException {
         return programSlotDao.isProgramSlotExists(programSlot);
     }
