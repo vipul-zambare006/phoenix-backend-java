@@ -78,7 +78,7 @@ public class ProgramRESTService {
 
         return rpsList;
     }
-    
+    /*
     @GET
     @Path("/userall")
     @Produces(MediaType.APPLICATION_JSON)
@@ -89,7 +89,9 @@ public class ProgramRESTService {
         
         for (int i = 0; i < userList.size(); i++) {
             usersList.getUserList().add(
-                new User(userList.get(i).getName()));
+                new User(userList.get(i).getId(),
+                         userList.get(i).getName(),
+                         userList.get(i).getRole()));
         }
 
         return usersList;
@@ -101,7 +103,7 @@ public class ProgramRESTService {
     public void createUser(User user){
         userService.processCreate(user);
     }
-    
+    */
     /**
      * PUT method for updating or creating an instance of resource
      * @param content representation for the resource

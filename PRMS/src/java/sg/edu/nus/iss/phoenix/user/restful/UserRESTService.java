@@ -30,7 +30,7 @@ import sg.edu.nus.iss.phoenix.user.service.UserService;
  * @author Rach
  */
 
-@Path("testradioprogram")
+@Path("user")
 @RequestScoped
 public class UserRESTService {
     
@@ -39,17 +39,10 @@ public class UserRESTService {
     
     private UserService userService;
 
-    /**
-     * Creates a new instance of RadioProgramRESTService
-     */
     public UserRESTService() {
         userService = new UserService();
     }
     
-    /**
-     * Retrieves representation of an instance of resource
-     * @return an instance of resource
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User getUser() {
@@ -67,10 +60,41 @@ public class UserRESTService {
         
         for (int i = 0; i < userList.size(); i++) {
             usersList.getUserList().add(
-                new User(userList.get(i).getName()));
+                new User(userList.get(i).getId(),
+                         userList.get(i).getName(),
+                         userList.get(i).getRole()));
         }
 
         return usersList;
+    }
+    
+    @PUT
+    @Path("/create")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createUser(User user){
+        userService.processCreate(user);
+    }
+    
+    @POST
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateUser(User user){
+        userService.processModify(user);
+    }
+    
+    @DELETE
+    @Path("/delete/{userName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void deleteUser(@PathParam("userName") String name) {
+        String name2;
+        try { 
+            name2 = URLDecoder.decode(name, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace(); 
+            return;
+        }
+
+        userService.processDelete(name2);
     }
     
 }
