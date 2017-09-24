@@ -18,18 +18,20 @@ import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
  * @author default
  */
 public class ScheduleService {
-    
-	DAOFactoryImpl factory;
-	ScheduleDAO scheduleDao;
-        ProgramSlotDAO programSlotDao;
-	public ScheduleService() {
-		super();
-		// Sorry. This implementation is wrong. To be fixed.
-		factory = new DAOFactoryImpl();
-		scheduleDao = factory.getScheduleDAO();
-                programSlotDao = factory.getProgramSlotDAO();
-	}
-	/*public ArrayList<ProgramSlot> searchPrograms(RadioProgram rpso) {
+
+    DAOFactoryImpl factory;
+    ScheduleDAO scheduleDao;
+    ProgramSlotDAO programSlotDao;
+
+    public ScheduleService() {
+        super();
+        // Sorry. This implementation is wrong. To be fixed.
+        factory = new DAOFactoryImpl();
+        scheduleDao = factory.getScheduleDAO();
+        programSlotDao = factory.getProgramSlotDAO();
+    }
+
+    /*public ArrayList<ProgramSlot> searchPrograms(RadioProgram rpso) {
 		ArrayList<RadioProgram> list = new ArrayList<RadioProgram>();
 		try {
 			list = (ArrayList<RadioProgram>) rpdao.searchMatching(rpso);
@@ -80,26 +82,24 @@ public class ScheduleService {
 		return currentList;
 
 	}*/
-        
-	public void processCreate(ProgramSlot programSlot) {
-		try {
-                    if(false){
-                           /* logic to check overlapping with existing Prg slot */
-                    }
-                    else{
+    public void processCreate(ProgramSlot programSlot) {
+        try {
+                if (! isProgramSlotExists(programSlot)) 
+                {
+                    if (!isScheduleExists(programSlot)) 
+                    {
                         scheduleDao.create(programSlot);
-                        programSlotDao.create(programSlot);
-                        /* ONCE PROGRAM SLOT CREATED ADD TO ANNUAL AND WEEKLY SCHEDULE */
-                       
                     }
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+                    programSlotDao.create(programSlot);
+                }
+        }
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+    }
 
-	/*public void processModify(RadioProgram rp) {
+    /*public void processModify(RadioProgram rp) {
 		
 			try {
 				rpdao.save(rp);
@@ -123,5 +123,13 @@ public class ScheduleService {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+	}*/
+    private boolean isProgramSlotExists(ProgramSlot programSlot) throws SQLException {
+        return programSlotDao.isProgramSlotExists(programSlot);
     }
+    
+    private boolean isScheduleExists(ProgramSlot programSlot) throws SQLException {
+        return scheduleDao.isScheduleExists(programSlot);
+    }
+
 }

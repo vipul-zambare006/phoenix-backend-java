@@ -166,6 +166,7 @@ public interface ScheduleDAO {
      * @return 
      * @throws java.sql.SQLException 
 	 */
-	public abstract List<AnnualSchedule> searchMatching(AnnualSchedule valueObject)
-			throws SQLException;
+	public abstract List<AnnualSchedule> searchMatching(AnnualSchedule valueObject) throws SQLException;
+
+        public abstract boolean isScheduleExists(ProgramSlot programSlot) throws SQLException ;
 }

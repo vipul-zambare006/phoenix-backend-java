@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.List;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
-import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
 /**
  *
@@ -166,4 +165,7 @@ public interface ProgramSlotDAO {
 	 */
 	public abstract List<ProgramSlot> searchMatching(ProgramSlot valueObject)
 			throws SQLException;
+        
+         public abstract boolean isProgramSlotExists(ProgramSlot programSlot) throws SQLException;
+           
 }
