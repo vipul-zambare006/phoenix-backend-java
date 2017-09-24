@@ -10,10 +10,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import sg.edu.nus.iss.phoenix.core.dao.DBConstants;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
@@ -22,7 +20,7 @@ import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
 /**
  *
- * @author default
+ * @author Vipul Zambare.
  */
 public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
@@ -33,33 +31,62 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
     public ProgramSlotDaoImpl() {
         super();
-        // TODO Auto-generated constructor stub
         connection = openConnection();
     }
 
     @Override
     public ProgramSlot createValueObject() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ProgramSlot();
     }
 
     @Override
-    public ProgramSlot getObject(String name) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ProgramSlot getObject(String programDate, String startTime) throws NotFoundException, SQLException {
+        ProgramSlot valueObject = createValueObject();
+        valueObject.setDateOfProgram(programDate);
+        valueObject.setStartTime(startTime);
+        load(valueObject);
+        return valueObject;
     }
 
     @Override
     public void load(ProgramSlot valueObject) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (valueObject.getDateOfProgram() == null || valueObject.getStartTime() == null) {
+            // System.out.println("Can not select without Primary-Key!");
+            throw new NotFoundException("Can not select without Primary-Key!");
+        }
+
+        String sql = "SELECT * FROM `program-slot` WHERE (`startTime` = ? )  AND ('dateOfProgram' = ?); ";
+        PreparedStatement stmt = null;
+        openConnection();
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, valueObject.getStartTime());
+            stmt.setString(2, valueObject.getDateOfProgram());
+
+            singleQuery(stmt, valueObject);
+
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
     }
 
 //    @Override
     public List<ProgramSlot> loadAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        openConnection();
+        String sql = "SELECT * FROM `program-slot` ORDER BY `dateOfProgram` ASC; ";
+        List<ProgramSlot> searchResults = listQuery(connection
+                .prepareStatement(sql));
+        closeConnection();
+        System.out.println("record size" + searchResults.size());
+        return searchResults;
     }
 
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
-        
+
         String sql = "";
         PreparedStatement stmt = null;
 
@@ -79,12 +106,9 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
             if (rowcount != 1) {
                 throw new SQLException("PrimaryKey Error when updating DB!");
             }
-        }
-        catch(SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
-        }
-        
-        finally {
+        } finally {
             if (stmt != null) {
                 stmt.close();
                 closeConnection();
@@ -94,52 +118,104 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
     @Override
     public void save(ProgramSlot valueObject) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "UPDATE `program-slot` SET `duration` = ?, `endTime` = ?, `program-name` = ?, `presenterId` = ?, `producerId` = ? WHERE (`startTime` = ? ) AND ('dateOfProgram' = ?); ";
+
+        PreparedStatement stmt = null;
+        openConnection();
+        try {
+            stmt = this.connection.prepareStatement(sql);
+
+            stmt.setString(1, valueObject.getDuration());
+
+            stmt.setString(2, valueObject.getEndTime());
+            stmt.setString(3, valueObject.getRadioProgramId());
+            stmt.setString(4, valueObject.getPresenterId());
+            stmt.setString(5, valueObject.getProducerId());
+            stmt.setString(6, valueObject.getStartTime());
+            stmt.setString(7, valueObject.getDateOfProgram());
+            
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount == 0) {
+                throw new NotFoundException(
+                        "Object could not be saved! (PrimaryKey not found)");
+            }
+            if (rowcount > 1) {
+                throw new SQLException(
+                        "PrimaryKey Error when updating DB! (Many objects were affected!)");
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
     }
 
     @Override
     public void delete(ProgramSlot valueObject) throws NotFoundException, SQLException {
-        /*logic to delete program slot from program-slot table*/
-        if (valueObject.getDuration() == null && valueObject.getDateOfProgram()== null) {
-			// System.out.println("Can not delete without Primary-Key!");
-			throw new NotFoundException("Can not delete without Primary-Key!");
-		}
 
-		String sql = "DELETE FROM `program-slot` WHERE (`duration` = ? ) AND ('dateOfProgram' = ?); ";
-		PreparedStatement stmt = null;
-		openConnection();
-		try {
-			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, valueObject.getDuration());
-                        stmt.setString(2, valueObject.getDateOfProgram());
-                        
+        String sql = "";
+        PreparedStatement stmt = null;
 
-			int rowcount = databaseUpdate(stmt);
-			if (rowcount == 0) {
-				// System.out.println("Object could not be deleted (PrimaryKey not found)");
-				throw new NotFoundException(
-						"Object could not be deleted! (PrimaryKey not found)");
-			}
-			if (rowcount > 1) {
-				// System.out.println("PrimaryKey Error when updating DB! (Many objects were deleted!)");
-				throw new SQLException(
-						"PrimaryKey Error when updating DB! (Many objects were deleted!)");
-			}
-		} finally {
-			if (stmt != null)
-				stmt.close();
-			closeConnection();
-		}
-    }
+        if (valueObject.getStartTime() == null && valueObject.getDateOfProgram() == null) {
+            throw new NotFoundException("Can not delete without Primary-Key!");
+        }
 
-    @Override
-    public void deleteAll(Connection conn) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            sql = "DELETE FROM `program-slot` WHERE (`startTime` = ? ) AND ('dateOfProgram' = ?); ";
+            stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, valueObject.getStartTime());
+            stmt.setString(2, valueObject.getDateOfProgram());
+
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount == 0) {
+                throw new NotFoundException(
+                        "Object could not be deleted! (PrimaryKey not found)");
+            }
+            if (rowcount > 1) {
+                throw new SQLException(
+                        "PrimaryKey Error when updating DB! (Many objects were deleted!)");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+                closeConnection();
+            }
+        }
     }
 
     @Override
     public int countAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        String sql = "SELECT count(*) FROM `program-slot` ";
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        int allRows = 0;
+        openConnection();
+        try {
+            stmt = connection.prepareStatement(sql);
+            result = stmt.executeQuery();
+
+            if (result.next()) {
+                allRows = result.getInt(1);
+            }
+        } finally {
+            if (result != null) {
+                result.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+        return allRows;
+    }
+
+    @Override
+    public void copy() throws NotFoundException, SQLException {
+        /* Copy schedule code will come here */
     }
 
     @Override
@@ -180,48 +256,124 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
         return result;
     }
-    
+
     private void closeConnection() {
-		try {
-			this.connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean isProgramSlotExists(ProgramSlot valueObject) throws SQLException {
         String sql = "";
         PreparedStatement stmt = null;
         ResultSet result = null;
-        
+
         try {
             sql = "SELECT * FROM `phoenix`.`program-slot` WHERE (dateOfProgram = ? AND ? BETWEEN startTime AND endTime ) ; ";
             stmt = this.connection.prepareStatement(sql);
 
             stmt.setString(1, valueObject.getDateOfProgram());
             stmt.setString(2, valueObject.getStartTime());
-            
+
             result = stmt.executeQuery();
-	    if (result.next()){
+            if (result.next()) {
                 return true;
                 //throw new SQLException("New Program-slot is overlapping with existing program-slot");
             }
             return false;
-        }
-         catch(SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return true;
         }
-//        finally 
-//        {
-//            if (stmt != null) 
-//            {
-//                stmt.close();
-//                closeConnection();
-//            }
-//        }
+    }
+
+    /**
+     * databaseQuery-method. This method is a helper method for internal use. It
+     * will execute all database queries that will return multiple rows. The
+     * resultset will be converted to the List of valueObjects. If no rows were
+     * found, an empty List will be returned.
+     *
+     * @param stmt This parameter contains the SQL statement to be excuted.
+     * @return
+     * @throws java.sql.SQLException
+     */
+    protected List<ProgramSlot> listQuery(PreparedStatement stmt) throws SQLException {
+
+        ArrayList<ProgramSlot> searchResults = new ArrayList<>();
+        ResultSet result = null;
+        openConnection();
+        try {
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                ProgramSlot temp = createValueObject();
+
+                temp.setDateOfProgram(result.getString("dateOfProgram"));
+                temp.setStartTime(result.getString("startTime"));
+                temp.setRadioProgramId(result.getString("radioProgramId"));
+                temp.setPresenterId(result.getString("presenterId"));
+                temp.setProducerId(result.getString("producerId"));
+
+                searchResults.add(temp);
+            }
+
+        } finally {
+            if (result != null) {
+                result.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+
+        return (List<ProgramSlot>) searchResults;
+    }
+
+    /**
+     * databaseQuery-method. This method is a helper method for internal use. It
+     * will execute all database queries that will return only one row. The
+     * resultset will be converted to valueObject. If no rows were found,
+     * NotFoundException will be thrown.
+     *
+     * @param stmt This parameter contains the SQL statement to be excuted.
+     * @param valueObject Class-instance where resulting data will be stored.
+     * @throws sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException
+     * @throws java.sql.SQLException
+     */
+    protected void singleQuery(PreparedStatement stmt, ProgramSlot valueObject)
+            throws NotFoundException, SQLException {
+
+        ResultSet result = null;
+        openConnection();
+        try {
+            result = stmt.executeQuery();
+
+            if (result.next()) {
+
+                ProgramSlot temp = createValueObject();
+
+                temp.setDateOfProgram(result.getString("dateOfProgram"));
+                temp.setStartTime(result.getString("startTime"));
+                temp.setRadioProgramId(result.getString("radioProgramId"));
+                temp.setPresenterId(result.getString("presenterId"));
+                temp.setProducerId(result.getString("producerId"));
+
+            } else {
+                throw new NotFoundException("Program-Slot Object Not Found!");
+            }
+        } finally {
+            if (result != null) {
+                result.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
     }
 
 }

@@ -8,6 +8,7 @@
 package sg.edu.nus.iss.phoenix.schedule.restful;
 
 
+import java.util.ArrayList;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -26,7 +27,7 @@ import sg.edu.nus.iss.phoenix.schedule.service.ScheduleService;
 
 /**
  *
- * @author Vipul
+ * @author Vipul Zambare.
  */
 @Path("schedule")
 @RequestScoped
@@ -44,46 +45,25 @@ public class ScheduleRESTService {
         scheduleService = new ScheduleService();
     }
 
-    /**
-     * Retrieves representation of an instance of resource
-     *
-     * @return an instance of resource
-     */
     @GET
+    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    public RadioProgram getScheduledProgram() {
-        //TODO return proper representation object
-        throw new UnsupportedOperationException();
+    public ArrayList<ProgramSlot> getScheduledPrograms() {
+      ArrayList<ProgramSlot> scheduledPrograms = scheduleService.findAll();
+        return scheduledPrograms;
     }
-
-//    @GET
-//    @Path("/all")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public ProgramSlot getScheduledPrograms() {
-//      ArrayList<progarmSlot> rplist = scheduleService.findAllRP();
-////        RadioPrograms rpsList = new RadioPrograms();
-////        rpsList.setRpList(new ArrayList<RadioProgram>());
-////
-////        for (int i = 0; i < rplist.size(); i++) {
-////            rpsList.getRpList().add(
-////                    new RadioProgram(rplist.get(i).getName(),
-////                            rplist.get(i).getDescription(),
-////                            rplist.get(i).getTypicalDuration()));
-////        }
-////
-//        return rpsList;
-//    }
+    
     /**
      * PUT method for updating or creating an instance of resource
      *
      * @param content representation for the resource
      */
-//    @POST
-//    @Path("/update")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public void updateRadioProgram(RadioProgram rp) {
-//        service.processModify(rp);
-//    }
+    @POST
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateSchedule(ProgramSlot programSlot) {
+        scheduleService.processModify(programSlot);
+    }
     
     /**
      * POST method for creating an instance of resource
@@ -100,13 +80,25 @@ public class ScheduleRESTService {
     /**
      * DELETE method for deleting an instance of resource
      *
-     * @param name name of the resource
+     * @param programSlot
      */
-    @DELETE
+    @PUT
     @Path("/delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void processDelete(ProgramSlot ps) {
-        
-        scheduleService.processDelete(ps);
+    public void processDelete(ProgramSlot programSlot) 
+    {
+        scheduleService.processDelete(programSlot);
+    }
+    
+      /**
+     * PUT method for updating or creating an instance of resource
+     *
+     * @param content representation for the resource
+     */
+    @POST
+    @Path("/copy")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void copySchedule(ProgramSlot programSlot) {
+        scheduleService.copySchedule(programSlot);
     }
 }

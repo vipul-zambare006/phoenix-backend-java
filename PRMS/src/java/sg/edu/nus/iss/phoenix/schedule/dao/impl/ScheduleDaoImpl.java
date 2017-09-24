@@ -21,7 +21,7 @@ import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 
 /**
  *
- * @author default
+ * @author Vipul Zambare.
  */
 public class ScheduleDaoImpl implements ScheduleDAO {
 
@@ -32,16 +32,9 @@ public class ScheduleDaoImpl implements ScheduleDAO {
 
     public ScheduleDaoImpl() {
         super();
-        // TODO Auto-generated constructor stub
         connection = openConnection();
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#createValueObject()
-     */
     @Override
     public AnnualSchedule createValueObject() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
