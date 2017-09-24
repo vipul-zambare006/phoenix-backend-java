@@ -8,6 +8,7 @@ package sg.edu.nus.iss.phoenix.schedule.dao.impl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -26,7 +27,7 @@ public class ScheduleDaoImpl implements ScheduleDAO {
 
     private static final String DELIMITER = ":";
     private static final Logger logger = Logger.getLogger(ScheduleDaoImpl.class.getName());
-private static final String user = "PointyHead";
+    private static final String user = "PointyHead";
     Connection connection;
 
     public ScheduleDaoImpl() {
@@ -64,21 +65,18 @@ private static final String user = "PointyHead";
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
         /* logic to create annnual and weekly schedule based on program slot will come here. */
-       
-//        String year = valueObject.getDateOfProgram().substring(0, 3);
-//        String assignedBy = user;
-        
+        String year = valueObject.getDateOfProgram().substring(0, 4);
+        String assignedBy = valueObject.getassignedBy();
+
         String sql = "";
         PreparedStatement stmt = null;
 
         try {
-            sql = "INSERT INTO `annual-schedule` ( year, assignedBy) VALUES (?, ?) ";
-            stmt = this.connection.prepareStatement(sql);
+            sql = "INSERT INTO `annual-schedule` ( year, assingedBy) VALUES (?, ?) ";
 
-            stmt.setString(1, valueObject.getDuration());
-            stmt.setString(2, valueObject.getDateOfProgram());
-            stmt.setString(3, valueObject.getStartTime());
-           // stmt.setString(4, valueObject.getProgramName());
+            stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, year);
+            stmt.setString(2, assignedBy);
 
             int rowcount = databaseUpdate(stmt);
             if (rowcount != 1) {
@@ -150,13 +148,45 @@ private static final String user = "PointyHead";
 
         return result;
     }
-    
+
     private void closeConnection() {
-		try {
-			this.connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean isScheduleExists(ProgramSlot valueObject) throws SQLException {
+        String sql = "";
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        String year = valueObject.getDateOfProgram().substring(0, 4);
+       
+        try {
+            sql = "SELECT * FROM `phoenix`.`annual-schedule` WHERE (year = ?);";
+            stmt = this.connection.prepareStatement(sql);
+
+            stmt.setString(1, year);
+
+            result = stmt.executeQuery();
+            if (result.next()) {
+                return true;
+                //throw new SQLException("New Program-slot is overlapping with existing program-slot");
+            }
+            return false;
+        }  
+        catch(SQLException ex)
+        {
+            ex.printStackTrace();
+            return true;
+        }
+    }
+
 }
+
+    
+
+

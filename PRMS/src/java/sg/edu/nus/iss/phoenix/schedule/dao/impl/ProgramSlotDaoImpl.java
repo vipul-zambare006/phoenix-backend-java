@@ -8,6 +8,7 @@ package sg.edu.nus.iss.phoenix.schedule.dao.impl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,31 +52,39 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+//    @Override
     public List<ProgramSlot> loadAll() throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
-        /* insert into `phoenix`.`program-slot` values(003000,'2011-10-24', '011-10-24 00:30:00', 'dance floor');*/
+        
         String sql = "";
         PreparedStatement stmt = null;
 
         try {
-            sql = "INSERT INTO `program-slot` ( duration, dateOfProgram, startTime, `program-name`, presenter, producer) VALUES (?, ?, ?, ?) ";
+            sql = "INSERT INTO `program-slot` ( duration, dateOfProgram, startTime, endTime, `program-name`, presenterId, producerId) VALUES (?, ?, ?, ?, ?, ?, ?) ";
             stmt = this.connection.prepareStatement(sql);
 
             stmt.setString(1, valueObject.getDuration());
             stmt.setString(2, valueObject.getDateOfProgram());
             stmt.setString(3, valueObject.getStartTime());
-           // stmt.setString(4, valueObject.r());
+            stmt.setString(4, valueObject.getEndTime());
+            stmt.setString(5, valueObject.getRadioProgramId());
+            stmt.setString(6, valueObject.getPresenterId());
+            stmt.setString(7, valueObject.getProducerId());
 
             int rowcount = databaseUpdate(stmt);
             if (rowcount != 1) {
                 throw new SQLException("PrimaryKey Error when updating DB!");
             }
-        } finally {
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        
+        finally {
             if (stmt != null) {
                 stmt.close();
                 closeConnection();
@@ -150,5 +159,39 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 			e.printStackTrace();
 		}
 	}
+
+    @Override
+    public boolean isProgramSlotExists(ProgramSlot valueObject) throws SQLException {
+        String sql = "";
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        
+        try {
+            sql = "SELECT * FROM `phoenix`.`program-slot` WHERE (dateOfProgram = ? AND ? BETWEEN startTime AND endTime ) ; ";
+            stmt = this.connection.prepareStatement(sql);
+
+            stmt.setString(1, valueObject.getDateOfProgram());
+            stmt.setString(2, valueObject.getStartTime());
+            
+            result = stmt.executeQuery();
+	    if (result.next()){
+                return true;
+                //throw new SQLException("New Program-slot is overlapping with existing program-slot");
+            }
+            return false;
+        }
+         catch(SQLException ex){
+            ex.printStackTrace();
+            return true;
+        }
+//        finally 
+//        {
+//            if (stmt != null) 
+//            {
+//                stmt.close();
+//                closeConnection();
+//            }
+//        }
+    }
 
 }

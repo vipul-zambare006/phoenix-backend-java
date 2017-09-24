@@ -6,126 +6,155 @@
 package sg.edu.nus.iss.phoenix.schedule.entity;
 
 import java.io.Serializable;
-import sg.edu.nus.iss.phoenix.authenticate.entity.User;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import java.sql.Time;
+import java.time.LocalTime;
 
 /**
  *
  * @author default
  */
-public class ProgramSlot  implements Cloneable, Serializable {
+public class ProgramSlot implements Cloneable, Serializable {
+
+    /**
+     * eclipse identifier
+     */
+    private static final long serialVersionUID = -5600218812568593553L;
+
     private String duration;
     private String dateOfProgram;
     private String startTime;
-    private RadioProgram radioProgram;
-    private User presenter;
-    private User producer;
-    private User assignedBy;
-    
-    public ProgramSlot () {
+    private String radioProgramId;
+    private String presenterId;
+    private String producerId;
+    private String assignedBy;
+
+    public ProgramSlot() {
 
     }
 
-    public ProgramSlot (String duration, String dateOfProgram, String startTime, RadioProgram radioProgram, User presenter, User producer, User assignedBy) 
-    {
-       this.duration = duration;
-       this.dateOfProgram = dateOfProgram;
-       this.radioProgram = radioProgram;
-       this.startTime = startTime;
-       this.presenter = presenter;
-       this.producer = producer;
-       this.assignedBy = assignedBy;
+    public ProgramSlot(String duration, String dateOfProgram, String startTime,
+            String radioProgramId, String presenterId,
+            String producerId, String assignedBy) {
+        this.duration = duration;
+        this.dateOfProgram = dateOfProgram;
+        this.startTime = startTime;
+        this.radioProgramId = radioProgramId;
+        this.presenterId = presenterId;
+        this.producerId = producerId;
+        this.assignedBy = assignedBy;
     }
 
-    /** 
-     * Get- and Set-methods for persistent variables. The default
-     * behavior does not make any checks against malformed data,
-     * so these might require some manual additions.
-     * @return 
+    /**
+     * Get- and Set-methods for persistent variables. The default behavior does
+     * not make any checks against malformed data, so these might require some
+     * manual additions.
+     *
+     * @return
      */
-
     public String getDuration() {
-          return this.duration;
+        return this.duration;
     }
+
     public void setDuration(String duration) {
-          this.duration = duration;
+        this.duration = duration;
     }
 
     public String getDateOfProgram() {
-          return this.dateOfProgram;
+        return this.dateOfProgram;
     }
+
     public void setDateOfProgram(String dateOfProgram) {
-          this.dateOfProgram = dateOfProgram;
+        this.dateOfProgram = dateOfProgram;
     }
-    
-    public String getStartTime(){
+
+    public String getStartTime() {
         return this.startTime;
     }
-    
-    public void setStartTime(String startTime){
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-    
-     public String getPresenter(){
-        return this.presenter.getName();
-    }
-    
-//    public void setPresenter(String startTime){
-//        this.startTime = startTime;
-//    }
-    
-     public String getProducer(){
-        return this.producer.getName();
-    }
-    
-//    public void setProducer(String startTime){
-//        this.startTime = startTime;
-//    }
-    
-     public String getRadioProgramName(){
-        return this.radioProgram.getName();
-    }
-    
-//    public void setStartTime(String startTime){
-//        this.startTime = startTime;
-//    }
 
-//    public String getProgramName(){
-//      return  this.programName ;
-//    }
-//    
-//    public void setProgramName(String programName){
-//            this.programName = programName;
-//        }
-    
-    /** 
-     * setAll allows to set all persistent variables in one method call.
-     * This is useful, when all data is available and it is needed to 
-     * set the initial state of this object. Note that this method will
-     * directly modify instance variables, without going trough the 
-     * individual set-methods.
-     * @param Time duration, Date dateOfProgram, Time startTime, String programName
+    public String getPresenterId() {
+        return this.presenterId;
+    }
+
+    public void setPresenterId(String presenterId) {
+        this.presenterId = presenterId;
+    }
+
+    public String getProducerId() {
+        return this.producerId;
+    }
+
+    public void setProducerId(String producerId) {
+        this.producerId = producerId;
+    }
+
+    public String getRadioProgramId() {
+        return this.radioProgramId;
+    }
+
+    public void setRadioProgramId(String radioProgramId) {
+        this.radioProgramId = radioProgramId;
+    }
+
+    public String getassignedBy() {
+        return this.assignedBy;
+    }
+
+    public void setassignedBy() {
+         this.assignedBy = assignedBy;
+    }
+
+    public String getEndTime() {
+        java.sql.Time myTime = java.sql.Time.valueOf(this.startTime);
+        LocalTime localtime = myTime.toLocalTime();
+        Time durationTime = Time.valueOf(duration);
+        long durationLong = durationTime.getTime();
+        localtime = localtime.plusMinutes(durationLong);
+        return localtime.toString();
+    }
+
+    /**
+     * setAll allows to set all persistent variables in one method call. This is
+     * useful, when all data is available and it is needed to set the initial
+     * state of this object. Note that this method will directly modify instance
+     * variables, without going trough the individual set-methods.
+     *
+     * @param duration
+     * @param dateOfProgram
+     * @param startTime
+     * @param radioProgramId
+     * @param producerId
+     * @param presenterId
+     * @param assignedBy
      */
-
-      public void setAll (String duration, String dateOfProgram, String startTime, RadioProgram radioProgram) {
+    public void setAll(String duration, String dateOfProgram, String startTime,
+            String radioProgramId, String presenterId,
+            String producerId, String assignedBy) {
         this.duration = duration;
         this.dateOfProgram = dateOfProgram;
-        this.radioProgram = radioProgram;
         this.startTime = startTime;
+        this.radioProgramId = radioProgramId;
+        this.presenterId = presenterId;
+        this.producerId = producerId;
+        this.assignedBy = assignedBy;
     }
-      
-    /** 
-     * hasEqualMapping-method will compare two AnnualSchedule instances
-     * and return true if they contain same values in all persistent instance 
+
+    /**
+     * hasEqualMapping-method will compare two AnnualSchedule instances and
+     * return true if they contain same values in all persistent instance
      * variables. If hasEqualMapping returns true, it does not mean the objects
-     * are the same instance. However it does mean that in that moment, they 
-     * are mapped to the same row in database.
+     * are the same instance. However it does mean that in that moment, they are
+     * mapped to the same row in database.
+     *
      * @param valueObject
-     * @return 
+     * @return
      */
     public boolean hasEqualMapping(ProgramSlot valueObject) {
 
-         /* if(this.year != valueObject.getYear())
+        /* if(this.year != valueObject.getYear())
                 return false;
         
           if (this.assignedBy == null) {
@@ -134,18 +163,18 @@ public class ProgramSlot  implements Cloneable, Serializable {
           } else if (!this.assignedBy.equals(valueObject.getAssignedBy())) {
                     return(false);
           }*/
-          return true;
+        return true;
     }
 
     /**
-     * toString will return String object representing the state of this 
-     * valueObject. This is useful during application development, and 
-     * possibly when application is writing object states in text log.
+     * toString will return String object representing the state of this
+     * valueObject. This is useful during application development, and possibly
+     * when application is writing object states in text log.
      */
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
-      /*  out.append("AnnualSchedule class, mapping to table Annual-Schedule \n");
+        /*  out.append("AnnualSchedule class, mapping to table Annual-Schedule \n");
         out.append("Persistent attributes: \n"); 
         out.append("year = ").append(this.year).append("\n"); 
         out.append("assigned by = ").append(this.assignedBy).append("\n"); */
@@ -153,21 +182,22 @@ public class ProgramSlot  implements Cloneable, Serializable {
     }
 
     /**
-     * Clone will return identical deep copy of this valueObject.
-     * Note, that this method is different than the clone() which
-     * is defined in java.lang.Object. Here, the returned cloned object
-     * will also have all its attributes cloned.
-     * @return 
-     * @throws java.lang.CloneNotSupportedException 
+     * Clone will return identical deep copy of this valueObject. Note, that
+     * this method is different than the clone() which is defined in
+     * java.lang.Object. Here, the returned cloned object will also have all its
+     * attributes cloned.
+     *
+     * @return
+     * @throws java.lang.CloneNotSupportedException
      */
-        @Override
+    @Override
     public Object clone() throws CloneNotSupportedException {
         AnnualSchedule cloned = new AnnualSchedule();
-        
-       /* cloned.setYear(this.year); 
+
+        /* cloned.setYear(this.year); 
         if (this.assignedBy != null)
              cloned.setAssignedBy(this.assignedBy); 
-       */
+         */
         return cloned;
     }
 }

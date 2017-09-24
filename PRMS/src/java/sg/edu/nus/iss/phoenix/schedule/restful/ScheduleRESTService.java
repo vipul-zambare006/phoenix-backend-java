@@ -7,9 +7,7 @@
  /*TODO: Only creating create programslot service as of now */
 package sg.edu.nus.iss.phoenix.schedule.restful;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
+
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -23,17 +21,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
-import sg.edu.nus.iss.phoenix.radioprogram.restful.RadioPrograms;
-import sg.edu.nus.iss.phoenix.radioprogram.service.ProgramService;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.service.ScheduleService;
-import java.util.Date;
-import java.sql.Time;
-import java.text.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import sg.edu.nus.iss.phoenix.schedule.dao.impl.ProgramSlotDaoImpl;
-//import org.codehaus.jackson.JsonParseException;
+
 /**
  *
  * @author Vipul
@@ -70,7 +60,7 @@ public class ScheduleRESTService {
 //    @Path("/all")
 //    @Produces(MediaType.APPLICATION_JSON)
 //    public ProgramSlot getScheduledPrograms() {
-//      ArrayList<ProgramSlot> rplist = scheduleService.findAllRP();
+//      ArrayList<progarmSlot> rplist = scheduleService.findAllRP();
 ////        RadioPrograms rpsList = new RadioPrograms();
 ////        rpsList.setRpList(new ArrayList<RadioProgram>());
 ////
@@ -98,33 +88,13 @@ public class ScheduleRESTService {
     /**
      * POST method for creating an instance of resource
      *
-     * @param content representation for the resource
+     * @param programSlot
      */
     @PUT
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createRadioProgram(ProgramSlot programSlot) {
-//        ObjectMapper mapper = new ObjectMapper();
-//        ProgramSlot value = mapper.readValue(programSlot, ProgramSlot.class);
-//        System.out.println(value);
-
-       // String startDate = programSlot.getDateOfProgram();
-        //Date sqlStartDate = convertStringToSqlDate(startDate);
-       // programSlot.setDateOfProgram(sqlStartDate.toString());
         scheduleService.processCreate(programSlot);
-    }
-
-    private Date convertStringToSqlDate(String inputDate) {
-        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
-        java.util.Date date = null;
-
-        try {
-            date = sdf1.parse(inputDate);
-        } catch (ParseException ex) {
-            Logger.getLogger(ProgramSlotDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        java.sql.Date sqlStartDate = new java.sql.Date(date.getTime());
-        return sqlStartDate;
     }
 
     /**
