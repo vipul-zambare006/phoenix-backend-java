@@ -5,8 +5,9 @@
         <group>
             <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/schedule/dao/impl/ProgramSlotDaoImpl.java</file>
             <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/schedule/restful/ScheduleRESTService.java</file>
-            <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/schedule/entity/ProgramSlot.java</file>
             <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/schedule/service/ScheduleService.java</file>
+            <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/schedule/dao/impl/ScheduleDaoImpl.java</file>
+            <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/schedule/dao/ProgramSlotDAO.java</file>
         </group>
     </open-files>
 </project-private>

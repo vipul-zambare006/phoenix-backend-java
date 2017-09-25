@@ -51,7 +51,6 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
     @Override
     public void load(ProgramSlot valueObject) throws NotFoundException, SQLException {
         if (valueObject.getDateOfProgram() == null || valueObject.getStartTime() == null) {
-            // System.out.println("Can not select without Primary-Key!");
             throw new NotFoundException("Can not select without Primary-Key!");
         }
 
@@ -133,7 +132,7 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
             stmt.setString(5, valueObject.getProducerId());
             stmt.setString(6, valueObject.getStartTime());
             stmt.setString(7, valueObject.getDateOfProgram());
-            
+
             int rowcount = databaseUpdate(stmt);
             if (rowcount == 0) {
                 throw new NotFoundException(
@@ -162,7 +161,7 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
         }
 
         try {
-            sql = "DELETE FROM `program-slot` WHERE (`startTime` = ? ) AND ('dateOfProgram' = ?); ";
+            sql = "DELETE FROM `program-slot` WHERE (`startTime` = ? ) AND ( `dateOfProgram` = ? ) ; ";
             stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, valueObject.getStartTime());
             stmt.setString(2, valueObject.getDateOfProgram());
@@ -313,9 +312,10 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
                 temp.setDateOfProgram(result.getString("dateOfProgram"));
                 temp.setStartTime(result.getString("startTime"));
-                temp.setRadioProgramId(result.getString("radioProgramId"));
+                temp.setRadioProgramId(result.getString("program-name"));
                 temp.setPresenterId(result.getString("presenterId"));
                 temp.setProducerId(result.getString("producerId"));
+                temp.setDuration(result.getString("duration"));
 
                 searchResults.add(temp);
             }
@@ -358,9 +358,10 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
                 temp.setDateOfProgram(result.getString("dateOfProgram"));
                 temp.setStartTime(result.getString("startTime"));
-                temp.setRadioProgramId(result.getString("radioProgramId"));
+                temp.setRadioProgramId(result.getString("program-name"));
                 temp.setPresenterId(result.getString("presenterId"));
                 temp.setProducerId(result.getString("producerId"));
+                temp.setDuration(result.getString("duration"));
 
             } else {
                 throw new NotFoundException("Program-Slot Object Not Found!");

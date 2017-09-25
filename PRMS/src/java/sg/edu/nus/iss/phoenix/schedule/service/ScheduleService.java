@@ -60,9 +60,7 @@ public class ScheduleService {
     public void processModify(ProgramSlot programSlot) {
         try {
             programSlotDao.save(programSlot);
-        } catch (NotFoundException ex) {
-            Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (NotFoundException | SQLException ex) {
             Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -74,11 +72,7 @@ public class ScheduleService {
     public void processDelete(ProgramSlot ps) {
         try {
             programSlotDao.delete(ps);
-        } catch (NotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+        } catch (NotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
