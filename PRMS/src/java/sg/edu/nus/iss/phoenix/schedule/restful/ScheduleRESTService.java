@@ -7,7 +7,6 @@
  /*TODO: Only creating create programslot service as of now */
 package sg.edu.nus.iss.phoenix.schedule.restful;
 
-
 import java.util.ArrayList;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
@@ -21,7 +20,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.service.ScheduleService;
 
@@ -90,12 +88,12 @@ public class ScheduleRESTService {
         scheduleService.processDelete(programSlot);
     }
     
-      /**
+   /**
      * PUT method for updating or creating an instance of resource
      *
      * @param content representation for the resource
      */
-    @POST
+    @PUT
     @Path("/copy")
     @Consumes(MediaType.APPLICATION_JSON)
     public void copySchedule(ProgramSlot programSlot) {
