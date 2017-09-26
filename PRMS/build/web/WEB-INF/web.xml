@@ -26,8 +26,4 @@
         <servlet-class>at.nocturne.core.NocturneApplicationController</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet>
-        <servlet-name>ProgramRESTService</servlet-name> 
-        <servlet-class>sg.edu.nus.iss.phoenix.radioprogram.restful.ProgramRESTService</servlet-class>
-    </servlet>
 </web-app>

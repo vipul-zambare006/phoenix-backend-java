@@ -21,11 +21,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.radioprogram.service.ProgramService;
-import sg.edu.nus.iss.phoenix.user.restful.Users;
-import sg.edu.nus.iss.phoenix.user.service.UserService;
 
 /**
  * REST Web Service
@@ -40,15 +37,12 @@ public class ProgramRESTService {
     private UriInfo context;
     
     private ProgramService service;
-    
-    private UserService userService;
 
     /**
      * Creates a new instance of RadioProgramRESTService
      */
     public ProgramRESTService() {
         service = new ProgramService();
-        userService = new UserService();
     }
 
     /**
@@ -78,32 +72,7 @@ public class ProgramRESTService {
 
         return rpsList;
     }
-    /*
-    @GET
-    @Path("/userall")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Users getAllUsers() {
-        ArrayList<User> userList = userService.findAllUsers();
-        Users usersList = new Users();
-        usersList.setUserList(new ArrayList<User>());
-        
-        for (int i = 0; i < userList.size(); i++) {
-            usersList.getUserList().add(
-                new User(userList.get(i).getId(),
-                         userList.get(i).getName(),
-                         userList.get(i).getRole()));
-        }
-
-        return usersList;
-    }
     
-    @PUT
-    @Path("/createUser")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void createUser(User user){
-        userService.processCreate(user);
-    }
-    */
     /**
      * PUT method for updating or creating an instance of resource
      * @param content representation for the resource
@@ -144,6 +113,4 @@ public class ProgramRESTService {
 
         service.processDelete(name2);
     }
-    
-    
 }

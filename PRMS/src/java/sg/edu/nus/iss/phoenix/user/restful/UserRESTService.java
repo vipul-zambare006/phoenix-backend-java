@@ -61,8 +61,8 @@ public class UserRESTService {
         for (int i = 0; i < userList.size(); i++) {
             usersList.getUserList().add(
                 new User(userList.get(i).getId(),
-                         userList.get(i).getName(),
-                         userList.get(i).getRole()));
+                         userList.get(i).getName())
+                        );
         }
 
         return usersList;

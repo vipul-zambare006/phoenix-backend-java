@@ -20,7 +20,6 @@ public class User implements Cloneable, Serializable {
 	private String id;
 	private String password;
 	private String name;
-        private String role = "Presenter";
 	private ArrayList<Role> roles = new ArrayList<Role>();
 
 	/**
@@ -39,7 +38,7 @@ public class User implements Cloneable, Serializable {
 
 	}
         
-        public User(String userId, String userName, String userRole){
+        public User(String userId, String userName){
             this.id = userId;
             this.name = userName;
             //this.role = userRole;
@@ -75,14 +74,6 @@ public class User implements Cloneable, Serializable {
 	public void setName(String nameIn) {
 		this.name = nameIn;
 	}
-        
-        public String getRole(){
-            return this.role;
-        }
-        
-        public void setRole(String role){
-            this.role = role;
-        }
 
 	public ArrayList<Role> getRoles() {
 		return roles;

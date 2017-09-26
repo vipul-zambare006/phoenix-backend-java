@@ -93,7 +93,8 @@ public class AuthenticateService {
 		return user;
 	}
         
-                public List<User> manageUser()
+        //Rach 
+        public List<User> manageUser()
         {
             List<User> data =null;
             try

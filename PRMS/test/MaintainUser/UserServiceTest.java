@@ -3,7 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sg.edu.nus.iss.phoenix.user.service;
+package MaintainUser;
+import sg.edu.nus.iss.phoenix.user.service.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import java.sql.SQLException;
