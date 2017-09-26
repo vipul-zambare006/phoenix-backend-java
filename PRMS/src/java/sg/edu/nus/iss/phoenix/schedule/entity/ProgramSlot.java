@@ -6,6 +6,7 @@
 package sg.edu.nus.iss.phoenix.schedule.entity;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.sql.Time;
 import java.time.LocalTime;
 
@@ -104,16 +105,37 @@ public class ProgramSlot implements Cloneable, Serializable {
     }
 
     public void setassignedBy() {
-         this.assignedBy = assignedBy;
+        this.assignedBy = assignedBy;
     }
 
     public String getEndTime() {
         java.sql.Time myTime = java.sql.Time.valueOf(this.startTime);
+        
         LocalTime localtime = myTime.toLocalTime();
-        Time durationTime = Time.valueOf(duration);
-        long durationLong = durationTime.getTime();
-        localtime = localtime.plusMinutes(durationLong);
+        
+        java.sql.Time durationUpdated = java.sql.Time.valueOf(this.duration);
+        Time durationTime = Time.valueOf(durationUpdated.toString());
+        LocalTime durationLocaltime = durationTime.toLocalTime();
+          
+        
+        long durationLong = durationLocaltime.getHour() + durationLocaltime.getMinute() + durationLocaltime.getSecond();
+        
+        localtime = localtime.plusHours(durationLong);
         return localtime.toString();
+
+//        java.sql.Time myTime = java.sql.Time.valueOf(this.startTime);
+//        java.sql.Time durationUpdated = java.sql.Time.valueOf(this.duration);
+//
+//        Time durationTime = Time.valueOf(durationUpdated.toString());
+//        LocalTime durationLocaltime = durationTime.toLocalTime();
+//        long durationtimeLong1 = durationLocaltime.;
+//
+//        long stTimeLong = myTime.getTime();
+//        long durationLong = durationUpdated.getTime();
+//
+//        long endTimeLong = stTimeLong + durationLong;
+//
+//        return new Time(endTimeLong).toString();
     }
 
     /**

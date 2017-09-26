@@ -1,0 +1,7 @@
+/nocturne/build/*
+/PRMS/build/*
+/PRMS/nbproject/*
+/PRMS/web/*
+*.class
+*.jar
+
