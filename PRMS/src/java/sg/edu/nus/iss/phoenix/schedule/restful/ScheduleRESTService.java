@@ -37,7 +37,7 @@ public class ScheduleRESTService {
     private UriInfo context;
 
     private ScheduleService scheduleService;
-    private ReviewSelectPresentorProducerService reviewSelectService;
+    
 
     /**
      * Creates a new instance of RadioProgramRESTService
@@ -103,15 +103,5 @@ public class ScheduleRESTService {
         scheduleService.copySchedule(programSlot);
     }
     
-    /**
-     * GET method to retrieve the instance of resource
-     */
-    
-    @GET
-    @Path("/getusers")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void processgetUsers(User user){
-         reviewSelectService.reviewSelectPresentorProducer();
-    }
    
 }

@@ -8,6 +8,7 @@ package sg.edu.nus.iss.phoenix.user.restful;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -21,80 +22,86 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
+import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.schedule.service.ReviewSelectPresentorProducerService;
 import sg.edu.nus.iss.phoenix.user.restful.UserList;
 import sg.edu.nus.iss.phoenix.user.service.UserService;
-
 
 /**
  *
  * @author Rach
  */
-
 @Path("user")
 @RequestScoped
 public class UserRESTService {
-    
-     @Context
+
+    @Context
     private UriInfo context;
-    
+
     private UserService userService;
+    private ReviewSelectPresentorProducerService reviewSelectService;
 
     public UserRESTService() {
         userService = new UserService();
+        reviewSelectService = new ReviewSelectPresentorProducerService();
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User getUser() {
         //TODO return proper representation object
         throw new UnsupportedOperationException();
     }
-    
-//    @GET
-//    @Path("/all")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public User getAllUsers() {
-//        ArrayList<User> userList = userService.findAllUsers();
-//        User usersList = new User();
-//        usersList.setUserList(new ArrayList<User>());
-//        
-//        for (int i = 0; i < userList.size(); i++) {
-//            usersList.getUserList().add(
-//                new User(userList.get(i).getId(),
-//                         userList.get(i).getName())
-//                        );
-//        }
-//
-//        return usersList;
-//    }
-    
+
     @PUT
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createUser(User user){
+    public void createUser(User user) {
         userService.processCreate(user);
     }
-    
+
     @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateUser(User user){
+    public void updateUser(User user) {
         userService.processModify(user);
     }
-    
+
     @DELETE
     @Path("/delete/{userName}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void deleteUser(@PathParam("userName") String name) {
         String name2;
-        try { 
+        try {
             name2 = URLDecoder.decode(name, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
             return;
         }
 
         userService.processDelete(name2);
     }
-    
+
+    /**
+     * GET method to retrieve the instance of resource
+     */
+    @GET
+    @Path("/getusers")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public UserList getAllPresenterProducer(User user) {
+
+        ArrayList<User> userList = (ArrayList<User>) reviewSelectService.reviewSelectPresentorProducer();
+        UserList userArrayList = new UserList();
+        userArrayList.setUserList(new ArrayList<User>());
+
+        for (int i = 0; i < userList.size(); i++) {
+            userArrayList.getUserList().add(
+                    new User(
+                            userList.get(i).getId(),
+                            userList.get(i).getName(),
+                            userList.get(i).getRoles()
+                    ));
+        }
+        return userArrayList;
+    }
 }
