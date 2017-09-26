@@ -15,26 +15,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
-import sg.edu.nus.iss.phoenix.authenticate.dao.RoleDao;
-import sg.edu.nus.iss.phoenix.authenticate.entity.Role;
+import sg.edu.nus.iss.phoenix.authenticate.dao.UserDao;
+import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 
 
 public class ReviewSelectPresentorProducerService {
     
     DAOFactoryImpl factory;
-    RoleDao roledao;
+    UserDao userdao;
     
     public ReviewSelectPresentorProducerService() {
 super();
 // TODO Auto-generated constructor stub
 factory = new DAOFactoryImpl();
-roledao = factory.getRoleDAO();
+userdao = factory.getUserDAO();
 }
     
-    public List<Role> reviewSelectPresentorProducer() {
-            List<Role> data = null;
+    public List<User> reviewSelectPresentorProducer() {
+            List<User> data = null;
             try {
-                data = roledao.loadAll();
+                data = userdao.loadAll();
             } catch (SQLException ex) {
                 Logger.getLogger(ReviewSelectPresentorProducerService.class.getName()).log(Level.SEVERE, null, ex);
             }
