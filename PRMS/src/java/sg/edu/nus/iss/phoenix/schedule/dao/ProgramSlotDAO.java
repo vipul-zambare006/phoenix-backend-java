@@ -33,7 +33,8 @@ public interface ProgramSlotDAO {
      * as a parameter. Returned valueObject will be created using the
      * createValueObject() method.
      *
-     * @param name
+     * @param programDate
+     * @param startTime
      * @return
      * @throws sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException
      * @throws java.sql.SQLException

@@ -72,7 +72,7 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
         }
     }
 
-//    @Override
+    @Override
     public List<ProgramSlot> loadAll() throws SQLException {
         openConnection();
         String sql = "SELECT * FROM `program-slot` ORDER BY `dateOfProgram` ASC; ";
@@ -264,6 +264,12 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
         }
     }
 
+    /**
+     *
+     * @param valueObject
+     * @return
+     * @throws SQLException
+     */
     @Override
     public boolean isProgramSlotExists(ProgramSlot valueObject) throws SQLException {
         String sql = "";
@@ -280,7 +286,6 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
             result = stmt.executeQuery();
             if (result.next()) {
                 return true;
-                //throw new SQLException("New Program-slot is overlapping with existing program-slot");
             }
             return false;
         } catch (SQLException ex) {

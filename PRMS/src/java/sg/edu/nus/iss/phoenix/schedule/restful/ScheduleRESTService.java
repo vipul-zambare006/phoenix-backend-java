@@ -54,7 +54,7 @@ public class ScheduleRESTService {
     /**
      * PUT method for updating or creating an instance of resource
      *
-     * @param content representation for the resource
+     * @param programSlot
      */
     @POST
     @Path("/update")
@@ -91,7 +91,7 @@ public class ScheduleRESTService {
    /**
      * PUT method for updating or creating an instance of resource
      *
-     * @param content representation for the resource
+     * @param programSlot
      */
     @PUT
     @Path("/copy")
