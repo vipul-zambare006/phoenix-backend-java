@@ -21,7 +21,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.service.ScheduleService;
+import sg.edu.nus.iss.phoenix.schedule.service.ReviewSelectPresentorProducerService;
 
 /**
  *
@@ -35,6 +37,7 @@ public class ScheduleRESTService {
     private UriInfo context;
 
     private ScheduleService scheduleService;
+    private ReviewSelectPresentorProducerService reviewSelectService;
 
     /**
      * Creates a new instance of RadioProgramRESTService
@@ -99,4 +102,16 @@ public class ScheduleRESTService {
     public void copySchedule(ProgramSlot programSlot) {
         scheduleService.copySchedule(programSlot);
     }
+    
+    /**
+     * GET method to retrieve the instance of resource
+     */
+    
+    @GET
+    @Path("/getusers")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void processgetUsers(User user){
+         reviewSelectService.reviewSelectPresentorProducer();
+    }
+   
 }
