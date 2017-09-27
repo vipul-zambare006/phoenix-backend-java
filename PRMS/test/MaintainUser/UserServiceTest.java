@@ -1,56 +1,79 @@
-///*
-// * To change this license header, choose License Headers in Project Properties.
-// * To change this template file, choose Tools | Templates
-// * and open the template in the editor.
-// */
-//package MaintainUser;
-//import sg.edu.nus.iss.phoenix.user.service.*;
-//import static org.mockito.Matchers.any;
-//import static org.mockito.Mockito.doThrow;
-//import java.sql.SQLException;
-//import org.junit.BeforeClass;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.mockito.Mock;
-//import org.mockito.runners.MockitoJUnitRunner;
-//import sg.edu.nus.iss.phoenix.authenticate.entity.User;
-//
-//@RunWith(MockitoJUnitRunner.class)
-///**
-// *
-// * @author Rach
-// */
-//public class UserServiceTest {
-//    
-//    private static User user = null;
-//    @Mock
-//    UserService mUserService;
-//    public UserServiceTest() {
-//    }
-//    
-//    @BeforeClass
-//    public static void init() {
-//	user = new User();
-//	user.setAll("rachel", "rachel", "createTest- User Name", "admin");
-//    }
-//    
-//    @Test(expected=Exception.class)
-//    public void testProcessCreate() {
-//        doThrow(new Exception()).when(mUserService).processCreate(any(User.class));
-//	mUserService.processCreate(user);
-//    }
-//
-//    @Test(expected=Exception.class)
-//    public void testProcessModify() {
-//        User modifiedUser = user;
-//	modifiedUser.setName(" modifyTest- User Name");
-//	doThrow(new Exception()).when(mUserService).processModify(any(User.class));
-//	mUserService.processModify(modifiedUser);
-//    }
-//    
-//    @Test(expected=Exception.class)
-//    public void testProcessDelete() {
-//	doThrow(new Exception()).when(mUserService).processDelete(any(String.class));
-//	mUserService.processDelete("rachel");
-//    }
-//}
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package MaintainUser;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import static org.junit.Assert.assertEquals;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import sg.edu.nus.iss.phoenix.user.service.*;
+import sg.edu.nus.iss.phoenix.authenticate.dao.UserDao;
+import sg.edu.nus.iss.phoenix.authenticate.entity.Role;
+import sg.edu.nus.iss.phoenix.authenticate.entity.User;
+import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
+
+
+/**
+ *
+ * @author Rach
+ */
+public class UserServiceTest {
+    
+    private static User user = null;
+    
+    @Mock
+    private static UserService userService;
+    private static UserDao userDao;
+    
+    public UserServiceTest() {
+    }
+    
+    @BeforeClass
+    public static void setup() throws SQLException{
+        userService = new UserService();
+        userDao = mock(UserDao.class);
+        ArrayList<Role> roles = new ArrayList<Role>();
+        roles.add(new Role("Presenter"));
+        roles.add(new Role("Producer"));
+        user = new User("Rachel","Rachel", roles);
+        User testUser = new User("Test","Test", roles);
+        ArrayList<User> userList = new ArrayList<User>();
+        userList.add(user);
+        userList.add(testUser);
+        //Stubs
+        when(userDao.loadAll()).thenReturn(userList);
+        
+    }
+    
+    @Test
+    public void testFindAllUsers() throws SQLException{
+        List<User> allUsers = userDao.loadAll();
+        User myUser = allUsers.get(0);
+        assertEquals("Rachel", myUser.getId());
+    }
+    
+   @Test(expected=Exception.class)
+   public void testprocessCreate() throws SQLException{
+       Mockito.doThrow(new Exception()).doNothing().when(userDao).create(user);
+   }
+   
+   @Test(expected=Exception.class)
+   public void testprocessModify() throws SQLException, NotFoundException{
+       Mockito.doThrow(new Exception()).doNothing().when(userDao).save(user);
+   }
+   
+   @Test(expected=Exception.class)
+   public void testprocessDelete() throws SQLException, NotFoundException{
+       Mockito.doThrow(new Exception()).doNothing().when(userDao).delete(user);
+   }
+    
+}
