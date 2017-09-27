@@ -15,7 +15,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -35,9 +34,7 @@ public class ScheduleRESTService {
 
     @Context
     private UriInfo context;
-
     private ScheduleService scheduleService;
-    
 
     /**
      * Creates a new instance of RadioProgramRESTService
@@ -62,7 +59,7 @@ public class ScheduleRESTService {
     @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateSchedule(ProgramSlot programSlot) {
+    public void updateProgramSlot(ProgramSlot programSlot) {
         scheduleService.processModify(programSlot);
     }
     
@@ -71,10 +68,10 @@ public class ScheduleRESTService {
      *
      * @param programSlot
      */
-    @PUT
+    @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createRadioProgram(ProgramSlot programSlot) {
+    public void createProgramSlot(ProgramSlot programSlot) {
         scheduleService.processCreate(programSlot);
     }
 
@@ -83,10 +80,10 @@ public class ScheduleRESTService {
      *
      * @param programSlot
      */
-    @PUT
+    @DELETE
     @Path("/delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void processDelete(ProgramSlot programSlot) 
+    public void deleteProgramSlot(ProgramSlot programSlot) 
     {
         scheduleService.processDelete(programSlot);
     }

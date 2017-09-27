@@ -82,15 +82,58 @@ public class UserRESTService {
         userService.processDelete(name2);
     }
 
+     /**
+     * GET method to retrieve the instance of resource
+     */
+    @GET
+    @Path("/all")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public UserList getAllUsers(User user) {
+
+        ArrayList<User> userList = (ArrayList<User>)  userService.findAllUsers();
+        UserList userArrayList = new UserList();
+        userArrayList.setUserList(new ArrayList<User>());
+
+        for (int i = 0; i < userList.size(); i++) {
+            userArrayList.getUserList().add(
+                    new User(
+                            userList.get(i).getId(),
+                            userList.get(i).getName(),
+                            userList.get(i).getRoles()
+                    ));
+        }
+        return userArrayList;
+    }
+    
     /**
      * GET method to retrieve the instance of resource
      */
     @GET
-    @Path("/getusers")
+    @Path("/presenter")
     @Consumes(MediaType.APPLICATION_JSON)
-    public UserList getAllPresenterProducer(User user) {
+    public UserList getAllPresenter(User user) {
 
-        ArrayList<User> userList = (ArrayList<User>) reviewSelectService.reviewSelectPresentorProducer();
+        ArrayList<User> userList = (ArrayList<User>) reviewSelectService.reviewSelectPresentor();
+        UserList userArrayList = new UserList();
+        userArrayList.setUserList(new ArrayList<User>());
+
+        for (int i = 0; i < userList.size(); i++) {
+            userArrayList.getUserList().add(
+                    new User(
+                            userList.get(i).getId(),
+                            userList.get(i).getName(),
+                            userList.get(i).getRoles()
+                    ));
+        }
+        return userArrayList;
+    }
+    
+     @GET
+    @Path("/producer")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public UserList getAllProducer(User user) {
+
+        ArrayList<User> userList = (ArrayList<User>) reviewSelectService.reviewSelectProducer();
         UserList userArrayList = new UserList();
         userArrayList.setUserList(new ArrayList<User>());
 

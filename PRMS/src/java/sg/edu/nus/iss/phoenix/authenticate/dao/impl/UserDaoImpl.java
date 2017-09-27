@@ -465,4 +465,22 @@ public class UserDaoImpl implements UserDao {
         }
         return conn;
     }
+
+    @Override
+    public List<User> loadAllPresenters() throws SQLException {
+          String sql = "select * from user where role like '%presenter%' ORDER BY id ASC ";
+        List<User> searchResults = listQuery(this.connection
+                .prepareStatement(sql));
+
+        return searchResults;
+    }
+
+    @Override
+    public List<User> loadAllProducers() throws SQLException {
+         String sql = "select * from user where role like '%producer%' ORDER BY id ASC ";
+        List<User> searchResults = listQuery(this.connection
+                .prepareStatement(sql));
+
+        return searchResults;
+    }
 }

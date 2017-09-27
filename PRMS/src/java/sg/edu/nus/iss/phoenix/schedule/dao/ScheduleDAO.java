@@ -57,7 +57,7 @@ public interface ScheduleDAO {
      * @throws sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException
      * @throws java.sql.SQLException
 	 */
-	public abstract void load(AnnualSchedule valueObject)
+	public abstract void load(ProgramSlot valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -101,7 +101,7 @@ public interface ScheduleDAO {
      * @throws sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException
      * @throws java.sql.SQLException
 	 */
-	public abstract void save(AnnualSchedule valueObject)
+	public abstract void save(ProgramSlot valueObject)
 			throws NotFoundException, SQLException;
 
 	/**
@@ -166,7 +166,7 @@ public interface ScheduleDAO {
      * @return 
      * @throws java.sql.SQLException 
 	 */
-	public abstract List<AnnualSchedule> searchMatching(AnnualSchedule valueObject) throws SQLException;
+	public abstract List<AnnualSchedule> searchMatching(ProgramSlot valueObject) throws SQLException;
 
         public abstract boolean isScheduleExists(ProgramSlot programSlot) throws SQLException ;
 }

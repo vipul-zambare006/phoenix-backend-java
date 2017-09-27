@@ -61,6 +61,28 @@ public interface UserDao {
      * @throws java.sql.SQLException
 	 */
 	public abstract List<User> loadAll() throws SQLException;
+        
+        /**
+	 * LoadAll-method. This will read all contents from database table and build
+	 * a List containing valueObjects. Please note, that this method will
+	 * consume huge amounts of resources if table has lot's of rows. This should
+	 * only be used when target tables have only small amounts of data.
+	 * 
+     * @return 
+     * @throws java.sql.SQLException
+	 */
+	public abstract List<User> loadAllPresenters() throws SQLException;
+        
+        /**
+	 * LoadAll-method. This will read all contents from database table and build
+	 * a List containing valueObjects. Please note, that this method will
+	 * consume huge amounts of resources if table has lot's of rows. This should
+	 * only be used when target tables have only small amounts of data.
+	 * 
+     * @return 
+     * @throws java.sql.SQLException
+	 */
+	public abstract List<User> loadAllProducers() throws SQLException;
 
 	/**
 	 * create-method. This will create new row in database according to supplied

@@ -54,7 +54,7 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
             throw new NotFoundException("Can not select without Primary-Key!");
         }
 
-        String sql = "SELECT * FROM `program-slot` WHERE (`startTime` = ? )  AND ('dateOfProgram' = ?); ";
+        String sql = "SELECT * FROM `program-slot` WHERE (`startTime` = ? )  AND (`dateOfProgram` = ?); ";
         PreparedStatement stmt = null;
         openConnection();
         try {
@@ -117,7 +117,7 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
     @Override
     public void save(ProgramSlot valueObject) throws NotFoundException, SQLException {
-        String sql = "UPDATE `program-slot` SET `duration` = ?, `endTime` = ?, `program-name` = ?, `presenterId` = ?, `producerId` = ? WHERE (`startTime` = ? ) AND ('dateOfProgram' = ?); ";
+        String sql = "UPDATE `program-slot` SET `duration` = ?, `endTime` = ?, `program-name` = ?, `presenterId` = ?, `producerId` = ? WHERE (`startTime` = ? ) AND (`dateOfProgram` = ?); ";
 
         PreparedStatement stmt = null;
         openConnection();

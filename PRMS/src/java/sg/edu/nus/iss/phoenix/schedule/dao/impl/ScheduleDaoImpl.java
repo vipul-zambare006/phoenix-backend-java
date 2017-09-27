@@ -46,7 +46,7 @@ public class ScheduleDaoImpl implements ScheduleDAO {
     }
 
     @Override
-    public void load(AnnualSchedule valueObject) throws NotFoundException, SQLException {
+    public void load(ProgramSlot valueObject) throws NotFoundException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -57,85 +57,67 @@ public class ScheduleDaoImpl implements ScheduleDAO {
 
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
-        /* logic to create annnual and weekly schedule based on program slot will come here. */
-        String year = valueObject.getDateOfProgram().substring(0, 4);
-        String assignedBy = valueObject.getassignedBy();
-
-        String sql = "";
-        PreparedStatement stmt = null;
-
         try {
-            sql = "INSERT INTO `annual-schedule` ( year, assingedBy) VALUES (?, ?) ";
-
-            stmt = this.connection.prepareStatement(sql);
-            stmt.setString(1, year);
-            stmt.setString(2, assignedBy);
-
-            int rowcount = databaseUpdate(stmt);
-            if (rowcount != 1) {
-                throw new SQLException("PrimaryKey Error when updating DB!");
-            }
+            createAnnualSchedule(valueObject);
+            createWeeklySchedule(valueObject);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         } finally {
-            if (stmt != null) {
-                stmt.close();
-                closeConnection();
-            }
+            closeConnection();
         }
     }
 
     @Override
-    public void save(AnnualSchedule valueObject) throws NotFoundException, SQLException {
+    public void save(ProgramSlot valueObject) throws NotFoundException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void delete(ProgramSlot valueObject) throws NotFoundException, SQLException {
         /*logic to delete program slot from the schedule*/
-        if (valueObject.getDuration() == null && valueObject.getDateOfProgram()== null) {
-			// System.out.println("Can not delete without Primary-Key!");
-			throw new NotFoundException("Can not delete without Primary-Key!");
-		}
+        if (valueObject.getDuration() == null && valueObject.getDateOfProgram() == null) {
+            // System.out.println("Can not delete without Primary-Key!");
+            throw new NotFoundException("Can not delete without Primary-Key!");
+        }
 
-		String sql = "DELETE FROM `program-slot` WHERE (`duration` = ? ) AND ('dateOfProgram' = ?); ";
-		PreparedStatement stmt = null;
-		openConnection();
-		try {
-			stmt = connection.prepareStatement(sql);
-			stmt.setString(1, valueObject.getDuration());
-                        stmt.setString(2, valueObject.getDateOfProgram());
-                        
+        String sql = "DELETE FROM `program-slot` WHERE (`duration` = ? ) AND ('dateOfProgram' = ?); ";
+        PreparedStatement stmt = null;
+        openConnection();
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, valueObject.getDuration());
+            stmt.setString(2, valueObject.getDateOfProgram());
 
-			int rowcount = databaseUpdate(stmt);
-			if (rowcount == 0) {
-				// System.out.println("Object could not be deleted (PrimaryKey not found)");
-				throw new NotFoundException(
-						"Object could not be deleted! (PrimaryKey not found)");
-			}
-			if (rowcount > 1) {
-				// System.out.println("PrimaryKey Error when updating DB! (Many objects were deleted!)");
-				throw new SQLException(
-						"PrimaryKey Error when updating DB! (Many objects were deleted!)");
-			}
-		} finally {
-			if (stmt != null)
-				stmt.close();
-			closeConnection();
-		}
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount == 0) {
+                throw new NotFoundException(
+                        "Object could not be deleted! (PrimaryKey not found)");
+            }
+            if (rowcount > 1) {
+                throw new SQLException(
+                        "PrimaryKey Error when updating DB! (Many objects were deleted!)");
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
     }
 
     @Override
     public void deleteAll(Connection conn) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public int countAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public List<AnnualSchedule> searchMatching(AnnualSchedule valueObject) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<AnnualSchedule> searchMatching(ProgramSlot valueObject) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     private Connection openConnection() {
@@ -187,7 +169,7 @@ public class ScheduleDaoImpl implements ScheduleDAO {
         PreparedStatement stmt = null;
         ResultSet result = null;
         String year = valueObject.getDateOfProgram().substring(0, 4);
-       
+
         try {
             sql = "SELECT * FROM `phoenix`.`annual-schedule` WHERE (year = ?);";
             stmt = this.connection.prepareStatement(sql);
@@ -200,16 +182,55 @@ public class ScheduleDaoImpl implements ScheduleDAO {
                 //throw new SQLException("New Program-slot is overlapping with existing program-slot");
             }
             return false;
-        }  
-        catch(SQLException ex)
-        {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return true;
         }
     }
 
+    public void createAnnualSchedule(ProgramSlot valueObject) throws SQLException {
+        /* logic to create annnual and weekly schedule based on program slot will come here. */
+        String year = valueObject.getDateOfProgram().substring(0, 4);
+        String assignedBy = valueObject.getassignby();
+
+        String sql = "";
+        PreparedStatement stmt = null;
+
+        try {
+            sql = "INSERT INTO `annual-schedule` ( year, assingedBy) VALUES (?, ?) ";
+
+            stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, year);
+            stmt.setString(2, assignedBy);
+
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount != 1) {
+                throw new SQLException("PrimaryKey Error when updating DB!");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void createWeeklySchedule(ProgramSlot valueObject) throws SQLException {
+        String sql = "";
+        PreparedStatement stmt = null;
+        String startDate = valueObject.getDateOfProgram();
+        String assignedBy = valueObject.getassignby();
+
+        try {
+            sql = "INSERT INTO `weekly-schedule` ( startDate, assignedBy) VALUES (?, ?) ";
+
+            stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, startDate);
+            stmt.setString(2, assignedBy);
+
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount != 1) {
+                throw new SQLException("PrimaryKey Error when updating DB!");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
-
-    
-
-

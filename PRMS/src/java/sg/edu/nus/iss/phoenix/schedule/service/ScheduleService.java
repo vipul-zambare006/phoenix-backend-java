@@ -31,7 +31,7 @@ public class ScheduleService {
         scheduleDao = factory.getScheduleDAO();
         programSlotDao = factory.getProgramSlotDAO();
     }
-    
+
     public void processCreate(ProgramSlot programSlot) {
         try {
             if (!isProgramSlotExists(programSlot)) {
@@ -58,15 +58,18 @@ public class ScheduleService {
     }
 
     public void processModify(ProgramSlot programSlot) {
-        try {
-            programSlotDao.save(programSlot);
-        } catch (NotFoundException | SQLException ex) {
+        try 
+        {
+                programSlotDao.save(programSlot);
+        }
+        catch (NotFoundException | SQLException ex) 
+        {
             Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void copySchedule(ProgramSlot programSlot) {
-            /* Copy schedule code will come here */
+        /* Copy schedule code will come here */
     }
 
     public void processDelete(ProgramSlot ps) {
