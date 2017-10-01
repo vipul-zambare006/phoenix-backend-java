@@ -20,9 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
-import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.service.ScheduleService;
-import sg.edu.nus.iss.phoenix.schedule.service.ReviewSelectPresentorProducerService;
 
 /**
  *
@@ -47,7 +45,7 @@ public class ScheduleRESTService {
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<ProgramSlot> getScheduledPrograms() {
-      ArrayList<ProgramSlot> scheduledPrograms = scheduleService.findAll();
+      ArrayList<ProgramSlot> scheduledPrograms = scheduleService.loadAll();
         return scheduledPrograms;
     }
     
@@ -99,6 +97,4 @@ public class ScheduleRESTService {
     public void copySchedule(ProgramSlot programSlot) {
         scheduleService.copySchedule(programSlot);
     }
-    
-   
 }

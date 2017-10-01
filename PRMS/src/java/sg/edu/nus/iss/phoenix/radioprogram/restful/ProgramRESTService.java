@@ -69,7 +69,6 @@ public class ProgramRESTService {
                     rplist.get(i).getDescription(), 
                     rplist.get(i).getTypicalDuration()));
         }
-
         return rpsList;
     }
     

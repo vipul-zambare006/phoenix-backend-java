@@ -5,54 +5,70 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.service.test;
 
+import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion.Static;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Matchers.any;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doThrow;
-import org.mockito.runners.MockitoJUnitRunner;
-import sg.edu.nus.iss.phoenix.authenticate.entity.User;
-import sg.edu.nus.iss.phoenix.user.service.UserService;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+import org.mockito.runners.MockitoJUnitRunner;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
+import sg.edu.nus.iss.phoenix.schedule.dao.ProgramSlotDAO;
+import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.service.ScheduleService;
 
 /**
  *
  * @author Vipul_Zambare
  */
-
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Static.class)
 public class ScheduleServiceTest {
-     
-    private static User user = null;
+
+    private static ProgramSlot programSlot = null;
+    private static ScheduleService scheduleService;
+    private static ArrayList<ProgramSlot> programSlotList = new ArrayList<>();
+   
     @Mock
-    UserService mUserService;
+    private static ProgramSlotDAO programSlotDao;
+    private static DAOFactoryImpl factory;
+    
     public ScheduleServiceTest() {
-    }
-    
-    @BeforeClass
-    public static void init() {
-	user = new User();
-	user.setAll("rachel", "rachel", "createTest- User Name", "admin");
-    }
-    
-    @Test(expected=Exception.class)
-    public void testProcessCreate() {
-        doThrow(new Exception()).when(mUserService).processCreate(any(User.class));
-	mUserService.processCreate(user);
+
     }
 
-    @Test(expected=Exception.class)
-    public void testProcessModify() {
-        User modifiedUser = user;
-	modifiedUser.setName(" modifyTest- User Name");
-	doThrow(new Exception()).when(mUserService).processModify(any(User.class));
-	mUserService.processModify(modifiedUser);
+    @BeforeClass
+    public static void setup() throws SQLException, Exception 
+    {
+        DAOFactoryImpl daoImpl =  mock(DAOFactoryImpl.class);
+        whenNew(DAOFactoryImpl.class).withNoArguments().thenReturn(daoImpl);
+        programSlotDao = mock(ProgramSlotDAO.class);
+        when(daoImpl.getProgramSlotDAO()).thenReturn(programSlotDao);
+        
+        programSlotList.add(new ProgramSlot("60", "2017-09-09", "pointyhead", "13:00:00", "dance floor", "dilbert", "wally"));
+        programSlotList.add(new ProgramSlot("90", "2017-09-12", "pointyhead", "12:00:00", "newz", "kilbert", "wally"));
+        programSlotList.add(new ProgramSlot("15", "2017-09-15", "pointyhead", "15:00:00", "pop songs", "wally", "wally"));
+        programSlotList.add(new ProgramSlot("30", "2017-09-20", "pointyhead", "08:00:00", "ad-break", "dilbert", "wally"));
     }
-    
-    @Test(expected=Exception.class)
-    public void testProcessDelete() {
-	doThrow(new Exception()).when(mUserService).processDelete(any(String.class));
-	mUserService.processDelete("rachel");
+
+    @Test
+    public void testLoadAllProgramSlots() throws SQLException {
+        when(programSlotDao.loadAll()).thenReturn(programSlotList);
+        scheduleService = new ScheduleService();
+        
+        List<ProgramSlot> programSlots = scheduleService.loadAll();
+        ProgramSlot programSlot1 = programSlots.get(0);
+        assertEquals("2017-09-09", programSlot1.getDateOfProgram());
     }
 }

@@ -45,7 +45,7 @@ public class ScheduleService {
         }
     }
 
-    public ArrayList<ProgramSlot> findAll() {
+    public ArrayList<ProgramSlot> loadAll() {
         ArrayList<ProgramSlot> currentList = new ArrayList<ProgramSlot>();
         try {
             currentList = (ArrayList<ProgramSlot>) programSlotDao.loadAll();
