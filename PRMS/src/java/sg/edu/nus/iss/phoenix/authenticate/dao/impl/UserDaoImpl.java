@@ -483,4 +483,13 @@ public class UserDaoImpl implements UserDao {
 
         return searchResults;
     }
+    
+    @Override
+    public List<User> loadAllPresenterProducers() throws SQLException {
+          String sql = "select * from user where role like '%presenter%' or role like '%producer%' order by name asc";
+        List<User> searchResults = listQuery(this.connection
+                .prepareStatement(sql));
+
+        return searchResults;
+    }
 }

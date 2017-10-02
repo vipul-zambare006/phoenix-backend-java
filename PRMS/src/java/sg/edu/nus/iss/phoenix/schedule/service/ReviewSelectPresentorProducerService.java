@@ -30,6 +30,17 @@ public class ReviewSelectPresentorProducerService {
         userdao = factory.getUserDAO();
     }
 
+    public List<User> reviewSelectPresentorProducer() {
+        List<User> data = null;
+        try {
+            data = userdao.loadAllPresenterProducers();
+            return data;
+        } catch (SQLException ex) {
+            Logger.getLogger(ReviewSelectPresentorProducerService.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
     public List<User> reviewSelectPresentor() {
         List<User> data = null;
         try {

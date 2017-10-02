@@ -42,6 +42,13 @@ public class User implements Cloneable, Serializable {
         this.name = name;
         this.roles = roles;
     }
+    
+      public User(String idIn, String name, String password,ArrayList<Role> roles) {
+        this.id = idIn;
+        this.name = name;
+        this.password = password;
+        this.roles = roles;
+    }
 
     /**
      * Get- and Set-methods for persistent variables. The default behaviour does

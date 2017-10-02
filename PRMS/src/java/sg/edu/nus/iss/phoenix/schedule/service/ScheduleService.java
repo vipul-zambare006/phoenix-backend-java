@@ -47,10 +47,11 @@ public class ScheduleService {
 
     public ArrayList<ProgramSlot> loadAll() {
         ArrayList<ProgramSlot> currentList = new ArrayList<ProgramSlot>();
-        try {
+        try
+        {
             currentList = (ArrayList<ProgramSlot>) programSlotDao.loadAll();
-        } catch (SQLException e) {
-
+        } catch (SQLException e) 
+        {
             e.printStackTrace();
         }
         return currentList;
