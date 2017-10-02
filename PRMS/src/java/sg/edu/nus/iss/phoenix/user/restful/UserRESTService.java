@@ -107,7 +107,7 @@ public class UserRESTService {
     }
     
     @GET
-    @Path("/producer")
+    @Path("/presenterproducer")
     @Produces(MediaType.APPLICATION_JSON)
     public UserList getAllPresenterProducer() {
 
@@ -120,6 +120,7 @@ public class UserRESTService {
                     new User(
                             userList.get(i).getId(),
                             userList.get(i).getName(),
+                            userList.get(i).getPassword(),
                             userList.get(i).getRoles()
                     ));
         }
