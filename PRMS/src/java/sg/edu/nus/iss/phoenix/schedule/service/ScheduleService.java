@@ -71,6 +71,7 @@ public class ScheduleService {
 
     public void copySchedule(ProgramSlot programSlot) {
         /* Copy schedule code will come here */
+       processCreate(programSlot);
     }
 
     public void processDelete(ProgramSlot ps) {

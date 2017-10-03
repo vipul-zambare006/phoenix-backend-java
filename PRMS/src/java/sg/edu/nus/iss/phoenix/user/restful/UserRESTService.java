@@ -8,7 +8,6 @@ package sg.edu.nus.iss.phoenix.user.restful;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -22,9 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.service.ReviewSelectPresentorProducerService;
-import sg.edu.nus.iss.phoenix.user.restful.UserList;
 import sg.edu.nus.iss.phoenix.user.service.UserService;
 
 /**
@@ -49,7 +46,6 @@ public class UserRESTService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User getUser() {
-        //TODO return proper representation object
         throw new UnsupportedOperationException();
     }
 

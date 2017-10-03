@@ -29,44 +29,22 @@ public class UserDaoImpl implements UserDao {
 
     public UserDaoImpl() {
         super();
-        // TODO Auto-generated constructor stub
         connection = openConnection();
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#createValueObject()
-     */
     @Override
     public User createValueObject() {
         return new User();
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#getObject(java.sql
-	 * .Connection, int)
-     */
     @Override
     public User getObject(String id) throws NotFoundException, SQLException {
-
         User valueObject = createValueObject();
         valueObject.setId(id);
         load(valueObject);
         return valueObject;
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#load(java.sql.Connection
-	 * , sg.edu.nus.iss.phoenix.authenticate.entity.User)
-     */
     @Override
     public void load(User valueObject) throws NotFoundException, SQLException {
 
@@ -85,14 +63,7 @@ public class UserDaoImpl implements UserDao {
             }
         }
     }
-
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#loadAll(java.sql
-	 * .Connection)
-     */
+  
     @Override
     public List<User> loadAll() throws SQLException {
 
@@ -103,13 +74,6 @@ public class UserDaoImpl implements UserDao {
         return searchResults;
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#create(java.sql.
-	 * Connection, sg.edu.nus.iss.phoenix.authenticate.entity.User)
-     */
     @Override
     public synchronized void create(User valueObject) throws SQLException {
 
@@ -144,13 +108,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#save(java.sql.Connection
-	 * , sg.edu.nus.iss.phoenix.authenticate.entity.User)
-     */
     @Override
     public void save(User valueObject) throws NotFoundException, SQLException {
 
@@ -183,13 +140,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#delete(java.sql.
-	 * Connection, sg.edu.nus.iss.phoenix.authenticate.entity.User)
-     */
     @Override
     public void delete(User valueObject) throws NotFoundException, SQLException {
 
@@ -218,13 +168,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#deleteAll(java.sql
-	 * .Connection)
-     */
     @Override
     public void deleteAll() throws SQLException {
 
@@ -242,13 +185,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#countAll(java.sql
-	 * .Connection)
-     */
     @Override
     public int countAll() throws SQLException {
 
@@ -285,13 +221,6 @@ public class UserDaoImpl implements UserDao {
         return (null);
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDao#searchMatching(java
-	 * .sql.Connection, sg.edu.nus.iss.phoenix.authenticate.entity.User)
-     */
     @Override
     public List<User> searchMatching(User valueObject) throws SQLException {
 

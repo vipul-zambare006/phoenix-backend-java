@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
@@ -37,22 +38,46 @@ public class ScheduleDaoImpl implements ScheduleDAO {
 
     @Override
     public AnnualSchedule createValueObject() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          return new AnnualSchedule();
     }
 
     @Override
-    public AnnualSchedule getObject(String name) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public AnnualSchedule getObject(int year) throws NotFoundException, SQLException {
+        AnnualSchedule valueObject = createValueObject();
+        valueObject.setYear(year);
+        load(valueObject);
+        return valueObject;
     }
 
     @Override
-    public void load(ProgramSlot valueObject) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void load(AnnualSchedule annualSchedule) throws NotFoundException, SQLException  {
+        
+        String sql = "SELECT * FROM `annual-schedule` WHERE (`year` = ? ); ";
+        PreparedStatement stmt = null;
+        openConnection();
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, annualSchedule.getYear());
+            stmt.setString(1, annualSchedule.getAssignedBy());
+            singleQuery(stmt, annualSchedule);
+        } 
+        finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
     }
 
     @Override
     public List<AnnualSchedule> loadAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        openConnection();
+        String sql = "SELECT * FROM `annual-schedule` ORDER BY `year` ASC; ";
+        List<AnnualSchedule> searchResults = listQuery(connection
+                .prepareStatement(sql));
+        closeConnection();
+        System.out.println("record size" + searchResults.size());
+        return searchResults;
     }
 
     @Override
@@ -68,26 +93,43 @@ public class ScheduleDaoImpl implements ScheduleDAO {
     }
 
     @Override
-    public void save(ProgramSlot valueObject) throws NotFoundException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void save(AnnualSchedule valueObject) throws NotFoundException, SQLException {
+         String sql = "UPDATE `annual-schedule` SET `assingedBy` = ? WHERE (`year` = ? ); ";
+
+        PreparedStatement stmt = null;
+        openConnection();
+        try {
+            stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, valueObject.getAssignedBy());
+            stmt.setInt(2, valueObject.getYear());
+
+            int rowcount = databaseUpdate(stmt);
+            if (rowcount == 0) {
+                throw new NotFoundException(
+                        "Object could not be saved! (PrimaryKey not found)");
+            }
+            if (rowcount > 1) {
+                throw new SQLException(
+                        "PrimaryKey Error when updating DB! (Many objects were affected!)");
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
     }
 
     @Override
-    public void delete(ProgramSlot valueObject) throws NotFoundException, SQLException {
-        /*logic to delete program slot from the schedule*/
-        if (valueObject.getDuration() == null && valueObject.getDateOfProgram() == null) {
-            // System.out.println("Can not delete without Primary-Key!");
-            throw new NotFoundException("Can not delete without Primary-Key!");
-        }
-
-        String sql = "DELETE FROM `program-slot` WHERE (`duration` = ? ) AND ('dateOfProgram' = ?); ";
+    public void delete(AnnualSchedule valueObject) throws NotFoundException, SQLException 
+    {
+        String sql = "DELETE FROM `annual-schedule` WHERE (`year` = ? ) ; ";
         PreparedStatement stmt = null;
         openConnection();
         try {
             stmt = connection.prepareStatement(sql);
-            stmt.setString(1, valueObject.getDuration());
-            stmt.setString(2, valueObject.getDateOfProgram());
-
+            stmt.setInt(1, valueObject.getYear());
+         
             int rowcount = databaseUpdate(stmt);
             if (rowcount == 0) {
                 throw new NotFoundException(
@@ -103,21 +145,6 @@ public class ScheduleDaoImpl implements ScheduleDAO {
             }
             closeConnection();
         }
-    }
-
-    @Override
-    public void deleteAll(Connection conn) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int countAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<AnnualSchedule> searchMatching(ProgramSlot valueObject) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     private Connection openConnection() {
@@ -232,5 +259,82 @@ public class ScheduleDaoImpl implements ScheduleDAO {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+    
+     /**
+     * databaseQuery-method. This method is a helper method for internal use. It
+     * will execute all database queries that will return only one row. The
+     * resultset will be converted to valueObject. If no rows were found,
+     * NotFoundException will be thrown.
+     *
+     * @param stmt This parameter contains the SQL statement to be excuted.
+     * @param valueObject Class-instance where resulting data will be stored.
+     * @throws sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException
+     * @throws java.sql.SQLException
+     */
+    protected void singleQuery(PreparedStatement stmt, AnnualSchedule valueObject)
+            throws NotFoundException, SQLException {
+
+        ResultSet result = null;
+        openConnection();
+        try {
+            result = stmt.executeQuery();
+
+            if (result.next()) {
+                AnnualSchedule temp = createValueObject();
+                temp.setYear(result.getInt("year"));
+                temp.setAssignedBy(result.getString("assingnedBy"));
+            } 
+            else {
+                throw new NotFoundException("AnnualSchedule Object Not Found!");
+            }
+        } finally {
+            if (result != null) {
+                result.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+    }
+    
+     /**
+     * databaseQuery-method. This method is a helper method for internal use. It
+     * will execute all database queries that will return multiple rows. The
+     * resultset will be converted to the List of valueObjects. If no rows were
+     * found, an empty List will be returned.
+     *
+     * @param stmt This parameter contains the SQL statement to be excuted.
+     * @return
+     * @throws java.sql.SQLException
+     */
+    protected List<AnnualSchedule> listQuery(PreparedStatement stmt) throws SQLException {
+
+        ArrayList<AnnualSchedule> searchResults = new ArrayList<>();
+        ResultSet result = null;
+        openConnection();
+        try {
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                AnnualSchedule temp = createValueObject();
+                temp.setYear(result.getInt("year"));
+                temp.setAssignedBy(result.getString("assingnedBy"));
+            
+                searchResults.add(temp);
+            }
+
+        } finally {
+            if (result != null) {
+                result.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+
+        return (List<AnnualSchedule>) searchResults;
     }
 }
