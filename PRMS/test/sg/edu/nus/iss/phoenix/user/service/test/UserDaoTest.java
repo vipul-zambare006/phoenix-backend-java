@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MaintainUser;
+package sg.edu.nus.iss.phoenix.user.service.test;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import junit.framework.TestCase;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,25 +27,23 @@ import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
  *
  * @author Rach
  */
-public class UserServiceTest {
+public class UserDaoTest {
     
     private static User user = null;
     
     @Mock
-    private static UserService userService;
     private static UserDao userDao;
     
-    public UserServiceTest() {
+    public UserDaoTest() {
     }
     
     @BeforeClass
     public static void setup() throws SQLException{
-        userService = new UserService();
         userDao = mock(UserDao.class);
         ArrayList<Role> roles = new ArrayList<Role>();
         roles.add(new Role("Presenter"));
         roles.add(new Role("Producer"));
-        user = new User("Rachel","Rachel", roles);
+        user = new User("testID","testName", roles);
         User testUser = new User("Test","Test", roles);
         ArrayList<User> userList = new ArrayList<User>();
         userList.add(user);
@@ -54,11 +53,11 @@ public class UserServiceTest {
         
     }
     
-    @Test
+    @Test(expected=Exception.class)
     public void testFindAllUsers() throws SQLException{
         List<User> allUsers = userDao.loadAll();
         User myUser = allUsers.get(0);
-        assertEquals("Rachel", myUser.getId());
+        assertEquals("testID", myUser.getId());
     }
     
    @Test(expected=Exception.class)
