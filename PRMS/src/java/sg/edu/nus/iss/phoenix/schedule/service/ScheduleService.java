@@ -129,9 +129,8 @@ public class ScheduleService {
  * isScheduleExists. Is a method to check if the schedule exist in the schedule
  * @param programSlot
  * @return boolean
- * @throws SQLException
  */
-    private boolean isScheduleExists(ProgramSlot programSlot) {
+    public boolean isScheduleExists(ProgramSlot programSlot) {
         try {
             return scheduleDao.isScheduleExists(programSlot);
         } catch (SQLException ex) {

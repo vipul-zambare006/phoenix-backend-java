@@ -101,7 +101,7 @@ public class ScheduleRESTService {
      * @param programSlot
      * @throws java.sql.SQLException
      */
-    @PUT
+    @POST
     @Path("/copy")
     @Consumes(MediaType.APPLICATION_JSON)
     public void copySchedule(ProgramSlot programSlot) throws SQLException {

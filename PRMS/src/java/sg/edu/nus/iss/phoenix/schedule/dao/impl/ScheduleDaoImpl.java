@@ -45,7 +45,7 @@ public class ScheduleDaoImpl implements ScheduleDAO {
     }
 /**
  * getObject. This method is used to get the instances of AnnualSchedule
- * @param name
+ * @param year
  * @return
  * @throws NotFoundException
  * @throws SQLException 
@@ -59,7 +59,7 @@ public class ScheduleDaoImpl implements ScheduleDAO {
     }
 /**
  * load. This method takes in valueObject of instance type Program Slot 
- * @param valueObject
+ * @param annualSchedule
  * @throws NotFoundException
  * @throws SQLException 
  */
