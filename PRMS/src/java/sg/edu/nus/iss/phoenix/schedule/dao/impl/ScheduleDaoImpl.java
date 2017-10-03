@@ -35,12 +35,21 @@ public class ScheduleDaoImpl implements ScheduleDAO {
         super();
         connection = openConnection();
     }
-
+/**
+ * createValueObject. This method creates a ValueObject of type AnnualSchedule 
+ * @return AnnualSchedule
+ */
     @Override
     public AnnualSchedule createValueObject() {
           return new AnnualSchedule();
     }
-
+/**
+ * getObject. This method is used to get the instances of AnnualSchedule
+ * @param name
+ * @return
+ * @throws NotFoundException
+ * @throws SQLException 
+ */
     @Override
     public AnnualSchedule getObject(int year) throws NotFoundException, SQLException {
         AnnualSchedule valueObject = createValueObject();
@@ -48,7 +57,12 @@ public class ScheduleDaoImpl implements ScheduleDAO {
         load(valueObject);
         return valueObject;
     }
-
+/**
+ * load. This method takes in valueObject of instance type Program Slot 
+ * @param valueObject
+ * @throws NotFoundException
+ * @throws SQLException 
+ */
     @Override
     public void load(AnnualSchedule annualSchedule) throws NotFoundException, SQLException  {
         
@@ -68,7 +82,11 @@ public class ScheduleDaoImpl implements ScheduleDAO {
             closeConnection();
         }
     }
-
+/**
+ * loadAll. This method gets the list of Annual Schedule
+ * @return ListOf Annual Schedules
+ * @throws SQLException 
+ */
     @Override
     public List<AnnualSchedule> loadAll() throws SQLException {
         openConnection();
@@ -79,7 +97,11 @@ public class ScheduleDaoImpl implements ScheduleDAO {
         System.out.println("record size" + searchResults.size());
         return searchResults;
     }
-
+/**
+ * create. This method takes in valueObject of instance type ProgramSlot 
+ * @param valueObject
+ * @throws SQLException 
+ */
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
         try {
@@ -91,7 +113,12 @@ public class ScheduleDaoImpl implements ScheduleDAO {
             closeConnection();
         }
     }
-
+/**
+ * save. This method is used to save the instances of ProgramSlot valueObject 
+ * @param valueObject
+ * @throws NotFoundException
+ * @throws SQLException 
+ */
     @Override
     public void save(AnnualSchedule valueObject) throws NotFoundException, SQLException {
          String sql = "UPDATE `annual-schedule` SET `assingedBy` = ? WHERE (`year` = ? ); ";
@@ -119,7 +146,12 @@ public class ScheduleDaoImpl implements ScheduleDAO {
             closeConnection();
         }
     }
-
+/**
+ * delete. This method is used to delete the programSlot it takes in the valueObject instances of it.
+ * @param valueObject
+ * @throws NotFoundException
+ * @throws SQLException 
+ */
     @Override
     public void delete(AnnualSchedule valueObject) throws NotFoundException, SQLException 
     {
@@ -146,7 +178,10 @@ public class ScheduleDaoImpl implements ScheduleDAO {
             closeConnection();
         }
     }
-
+/**
+ * openConnection. This method is used for open connection to the database.
+ * @return 
+ */
     private Connection openConnection() {
         Connection conn = null;
 
@@ -180,7 +215,9 @@ public class ScheduleDaoImpl implements ScheduleDAO {
 
         return result;
     }
-
+/**
+ * closeConnection. This method is used to close connection for the database
+ */
     private void closeConnection() {
         try {
             this.connection.close();
@@ -189,7 +226,13 @@ public class ScheduleDaoImpl implements ScheduleDAO {
             e.printStackTrace();
         }
     }
-
+/**
+ * isScheduleExists. This method is to check if the isScheduleExists in the program slot
+ * it does the validation check.
+ * @param valueObject
+ * @return
+ * @throws SQLException 
+ */
     @Override
     public boolean isScheduleExists(ProgramSlot valueObject) throws SQLException {
         String sql = "";
@@ -214,7 +257,11 @@ public class ScheduleDaoImpl implements ScheduleDAO {
             return true;
         }
     }
-
+/**
+ * createAnnualSchedule. This method is used to create a Annual schedule.
+ * @param valueObject. This takes the instance of program slot
+ * @throws SQLException 
+ */
     public void createAnnualSchedule(ProgramSlot valueObject) throws SQLException {
         /* logic to create annnual and weekly schedule based on program slot will come here. */
         String year = valueObject.getDateOfProgram().substring(0, 4);
@@ -238,7 +285,11 @@ public class ScheduleDaoImpl implements ScheduleDAO {
             ex.printStackTrace();
         }
     }
-
+/**
+ * createWeeklySchedule. This method takes in programSlot and create weekly schedule.
+ * @param valueObject
+ * @throws SQLException 
+ */
     public void createWeeklySchedule(ProgramSlot valueObject) throws SQLException {
         String sql = "";
         PreparedStatement stmt = null;

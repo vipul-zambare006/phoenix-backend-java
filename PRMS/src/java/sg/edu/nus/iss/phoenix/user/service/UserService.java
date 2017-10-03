@@ -22,7 +22,10 @@ public class UserService {
        factory = new DAOFactoryImpl();
        userDao = factory.getUserDAO();
    }
-   
+/** 
+ * processCreate. This method is used to process the create user.
+ * @param user 
+ */
    public void processCreate(User user){
        try{
            userDao.create(user);
@@ -30,7 +33,10 @@ public class UserService {
            e.printStackTrace();
        }
    }
-   
+/**
+ * processModify. This method is used to start the process for modify user.
+ * @param user 
+ */   
     public void processModify(User user) {
          try{
              userDao.save(user);
@@ -42,7 +48,10 @@ public class UserService {
 		e.printStackTrace();
 	 }
      }
-         
+/**
+ * processDelete. This method is used to start delete process of the users.
+ * @param name 
+ */         
      public void processDelete(String name)
      {
          try{
@@ -56,7 +65,10 @@ public class UserService {
                 e.printStackTrace();
             }
      }
-     
+/**
+ * findAllUsers. This method is used to find all users and returns the list of users.
+ * @return ArrayList of type User
+ */     
      public ArrayList<User> findAllUsers(){
          ArrayList<User> userList = new ArrayList<User>();
          try {

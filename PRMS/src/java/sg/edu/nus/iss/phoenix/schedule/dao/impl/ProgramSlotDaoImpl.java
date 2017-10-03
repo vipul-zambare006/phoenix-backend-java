@@ -28,17 +28,29 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
     private static final Logger logger = Logger.getLogger(ProgramSlotDaoImpl.class.getName());
 
     Connection connection;
-
+/**
+ * ProgramSlotDaoImpl. This method is used get the connection to the program slot Dao
+ */
     public ProgramSlotDaoImpl() {
         super();
         connection = openConnection();
     }
-
+/**
+ * createValueObject. This method is used to createValueObject which returns the program slot
+ * @return Program slot of type Program Slot
+ */
     @Override
     public ProgramSlot createValueObject() {
         return new ProgramSlot();
     }
-
+/**
+ * getObject. This method is used to get Object of type program slot.
+ * @param programDate
+ * @param startTime
+ * @return
+ * @throws NotFoundException
+ * @throws SQLException 
+ */
     @Override
     public ProgramSlot getObject(String programDate, String startTime) throws NotFoundException, SQLException {
         ProgramSlot valueObject = createValueObject();
@@ -47,7 +59,12 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
         load(valueObject);
         return valueObject;
     }
-
+/**
+ * load. this method is used to load the instances of program slot
+ * @param valueObject
+ * @throws NotFoundException
+ * @throws SQLException 
+ */
     @Override
     public void load(ProgramSlot valueObject) throws NotFoundException, SQLException {
         if (valueObject.getDateOfProgram() == null || valueObject.getStartTime() == null) {
@@ -71,7 +88,11 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
             closeConnection();
         }
     }
-
+/**
+ * loadAll. This method is used to loadAll list of program Slot.
+ * @return
+ * @throws SQLException 
+ */
     @Override
     public List<ProgramSlot> loadAll() throws SQLException {
         openConnection();
@@ -82,7 +103,11 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
         System.out.println("record size" + searchResults.size());
         return searchResults;
     }
-
+/**
+ * create. This method is used to create a Program Slot.
+ * @param valueObject
+ * @throws SQLException 
+ */
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
 
@@ -114,7 +139,12 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
             }
         }
     }
-
+/**
+ * save. This method is used to save the list of program slot.
+ * @param valueObject
+ * @throws NotFoundException
+ * @throws SQLException 
+ */
     @Override
     public void save(ProgramSlot valueObject) throws NotFoundException, SQLException {
         String sql = "UPDATE `program-slot` SET `duration` = ?, `endTime` = ?, `program-name` = ?, `presenterId` = ?, `producerId` = ? WHERE (`startTime` = ? ) AND (`dateOfProgram` = ?); ";
@@ -149,7 +179,12 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
             closeConnection();
         }
     }
-
+/**
+ * delete. This method is used to delete the program slot.
+ * @param valueObject
+ * @throws NotFoundException
+ * @throws SQLException 
+ */
     @Override
     public void delete(ProgramSlot valueObject) throws NotFoundException, SQLException {
 
@@ -184,7 +219,11 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
             }
         }
     }
-
+/**
+ * countALL.This method is used to countALL program slots to get the statistics.
+ * @return
+ * @throws SQLException 
+ */
     @Override
     public int countAll() throws SQLException {
 
@@ -221,7 +260,10 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
     public List<ProgramSlot> searchMatching(ProgramSlot valueObject) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+/**
+ * openConnection. This method is used to open a connection to DB.
+ * @return 
+ */
     private Connection openConnection() {
         Connection conn = null;
 
@@ -255,7 +297,9 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
 
         return result;
     }
-
+/**
+ * closeConnection. This method is used to close connection from  the database.
+ */
     private void closeConnection() {
         try {
             this.connection.close();
@@ -297,7 +341,7 @@ public class ProgramSlotDaoImpl implements ProgramSlotDAO {
     /**
      * databaseQuery-method. This method is a helper method for internal use. It
      * will execute all database queries that will return multiple rows. The
-     * resultset will be converted to the List of valueObjects. If no rows were
+     * result set will be converted to the List of valueObjects. If no rows were
      * found, an empty List will be returned.
      *
      * @param stmt This parameter contains the SQL statement to be excuted.

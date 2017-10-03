@@ -14,11 +14,17 @@ import sg.edu.nus.iss.phoenix.authenticate.entity.User;
  */
 public class UserList {
     private List<User> userList;
-    
+/**
+ * getSUerList. This method is used to get the list of users.
+ * @return 
+ */    
     public List<User> getUserList(){
         return userList;
     }
-    
+/**
+ * setUserList. This method set the user list.
+ * @param userList 
+ */       
     public void setUserList(List<User> userList){
         this.userList = userList;
     }

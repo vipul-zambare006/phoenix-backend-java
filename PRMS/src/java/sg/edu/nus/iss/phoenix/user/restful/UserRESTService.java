@@ -42,27 +42,39 @@ public class UserRESTService {
         userService = new UserService();
         reviewSelectService = new ReviewSelectPresentorProducerService();
     }
-
+/**
+ * getUSer. This method is used to get the user.
+ * @return of type User
+ */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User getUser() {
         throw new UnsupportedOperationException();
     }
-
+/**
+ * createUser. This method is used to create a user.
+ * @param user 
+ */
     @PUT
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createUser(User user) {
         userService.processCreate(user);
     }
-
+/**
+ * updateUser. This method is used to update user.
+ * @param user 
+ */
     @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateUser(User user) {
         userService.processModify(user);
     }
-
+/**
+ * deleteUser. This method is used to delete user.
+ * @param name 
+ */
     @DELETE
     @Path("/delete/{userName}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -78,9 +90,10 @@ public class UserRESTService {
         userService.processDelete(name2);
     }
 
-    /**
-     * GET method to retrieve the instance of resource
-     */
+ /**
+    * getAllUsers. This method GET to retrieve the instance of resource
+    * @return type UserList
+    */
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
@@ -101,7 +114,10 @@ public class UserRESTService {
         }
         return userArrayList;
     }
-    
+/** 
+ * getAllPresenterProducer. This method gets the All list of presenter producer.
+ * @return type Array of userList
+ */    
     @GET
     @Path("/presenterproducer")
     @Produces(MediaType.APPLICATION_JSON)
