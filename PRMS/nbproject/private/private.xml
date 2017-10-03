@@ -5,6 +5,12 @@
         <group>
             <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/user/restful/UserRESTService.java</file>
             <file>file:/home/default/Projects/PRMS-Java/PRMS/nbproject/build-impl.xml</file>
+            <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/authenticate/RESTful/ApplicationConfig.java</file>
+            <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/authenticate/RESTful/AuthenticateRESTService.java</file>
+            <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/schedule/restful/ScheduleRESTService.java</file>
+            <file>file:/home/default/Projects/PRMS-Java/PRMS/test/sg/edu/nus/iss/phoenix/schedule/service/test/ScheduleServiceTest.java</file>
+            <file>file:/home/default/Projects/PRMS-Java/PRMS/src/java/sg/edu/nus/iss/phoenix/schedule/dao/impl/ScheduleDaoImpl.java</file>
+            <file>file:/home/default/Projects/PRMS-Java/PRMS/test/sg/edu/nus/iss/phoenix/schedule/service/test/ScheduleDAOTest.java</file>
         </group>
     </open-files>
 </project-private>
