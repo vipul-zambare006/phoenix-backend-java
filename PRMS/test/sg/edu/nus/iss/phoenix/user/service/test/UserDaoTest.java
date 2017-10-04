@@ -7,7 +7,6 @@ package sg.edu.nus.iss.phoenix.user.service.test;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import junit.framework.TestCase;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,12 +15,10 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import sg.edu.nus.iss.phoenix.user.service.*;
 import sg.edu.nus.iss.phoenix.authenticate.dao.UserDao;
 import sg.edu.nus.iss.phoenix.authenticate.entity.Role;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
-
 
 /**
  *
